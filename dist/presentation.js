@@ -4,6 +4,10 @@ const armorTier=n=>['0','I','II','III'][n]??String(n);
 function structureLabel(u,name){return name(u.team)+' · '+(u.kind==='base'?'БАЗА':u.kind==='tower'?u.number:'ТУРЕЛЬ')+' · '+armorTier(u.armor);}
 const angle=(a,b,t)=>a+Math.atan2(Math.sin(b-a),Math.cos(b-a))*t;
 function blend(a,b,t){if(!a||a.id!==b.id||Math.hypot(b.x-a.x,b.y-a.y)>160||a.hp<=0||b.hp<=0)return b;const out={...b};for(const k of ['x','y'])if(Number.isFinite(a[k])&&Number.isFinite(b[k]))out[k]=a[k]+(b[k]-a[k])*t;for(const k of ['angle','turret'])if(Number.isFinite(a[k])&&Number.isFinite(b[k]))out[k]=angle(a[k],b[k],t);if(b.guns)out.guns=b.guns.map((g,i)=>({...g,angle:a.guns?.[i]?angle(a.guns[i].angle,g.angle,t):g.angle}));return out;}
+class TowCamera{
+ constructor(){this.owner=null;this.following=false;this.returning=false;this.center=null;}
+ update(state,dt){const owner=state.me.tank.id,tank=state.me.tank;if(this.owner!==owner||state.selection?.active){this.owner=owner;this.following=false;this.returning=false;this.center={x:tank.x,y:tank.y};}const missile=state.shots.find(s=>s.ammo==='TOW'&&s.owner===owner);if(missile){this.center={x:missile.x,y:missile.y};this.following=true;this.returning=false;}else if(this.following){this.following=false;this.returning=true;}if(this.returning){const k=1-Math.exp(-5*Math.min(.1,Math.max(0,dt)));this.center.x+=(tank.x-this.center.x)*k;this.center.y+=(tank.y-this.center.y)*k;if(Math.hypot(tank.x-this.center.x,tank.y-this.center.y)<1)this.returning=false;}if(!missile&&!this.returning)this.center={x:tank.x,y:tank.y};return {...this.center,locked:!!missile||this.returning};}
+}
 class NetworkView{
  constructor({delay=0.1}={}){this.delay=delay;this.frames=[];this.latest=null;}
  reset(state,now){this.frames=[];this.latest=null;this.push(state,now);}
@@ -20,5 +24,5 @@ class NetworkView{
 function announcementText(e,viewer,name){const own=e.team===viewer;switch(e.kind){case 'level':return 'НОВЫЙ УРОВЕНЬ — '+e.level;case 'centralSpawn':return 'НЕЙТРАЛЬНАЯ ТУРЕЛЬ FIA ПОЯВИЛАСЬ';case 'centralDestroyed':return e.team===-1?'НЕЙТРАЛЬНАЯ ТУРЕЛЬ УНИЧТОЖЕНА':own?'ВАША ЦЕНТРАЛЬНАЯ ТУРЕЛЬ УНИЧТОЖЕНА':'ВРАЖЕСКАЯ ЦЕНТРАЛЬНАЯ ТУРЕЛЬ УНИЧТОЖЕНА';case 'centralCaptured':return (own?'ВАША КОМАНДА':'КОМАНДА '+name(e.team))+' ЗАХВАТИЛА ЦЕНТР';case 'towerDestroyed':return (own?'СОЮЗНАЯ':'ВРАЖЕСКАЯ')+' БАШНЯ '+e.number+' УНИЧТОЖЕНА · '+(e.lane?'НИЖНЯЯ':'ВЕРХНЯЯ')+' ЛИНИЯ';case 'tankKill':return own?'ВРАЖЕСКИЙ ТАНК УНИЧТОЖЕН · +'+e.reward+' XP':'ВАШ ТАНК УНИЧТОЖЕН';default:return '';}}
 function captureRadius(progress,duration,radius){return radius*Math.sqrt(Math.max(0,Math.min(1,progress/duration)));}
 function repairProgress(r,time){if(!r)return 0;const clamp=v=>Math.max(0,Math.min(1,v)),warmup=Math.max(.001,r.warmup??5);if(r.cancelAt!==null&&r.cancelAt!==undefined){const start=r.cancelStarted??r.cancelAt-2,from=r.cancelProgress??clamp((start-r.started)/warmup),duration=r.cancelAt-start;return duration<=0?0:from*clamp((r.cancelAt-time)/duration);}return clamp((time-r.started)/warmup);}
-const api={repairProgress,announcementText,captureRadius,armorTier,structureLabel,NetworkView};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.FrontlinePresentation=api;
+const api={TowCamera,repairProgress,announcementText,captureRadius,armorTier,structureLabel,NetworkView};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.FrontlinePresentation=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
