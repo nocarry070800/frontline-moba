@@ -1,0 +1,11 @@
+{
+  "name": "frontline-moba",
+  "private": true,
+  "version": "0.20.0",
+  "scripts": {
+    "start": "node server.cjs"
+  },
+  "engines": {
+    "node": ">=24 <25"
+  }
+}
