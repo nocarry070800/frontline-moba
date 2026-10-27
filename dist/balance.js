@@ -336,7 +336,7 @@
       radius: 29,
       vision: 480,
       range: 175,
-      speed: 150,
+      speed: 200,
       reverseFactor: 1,
       hullTurnDegrees: 110,
       turretTurnDegrees: 180,

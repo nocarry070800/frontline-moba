@@ -20,4 +20,25 @@ html[data-layout="compact"] #field{max-width:960px;margin-inline:auto}
 
 #field{aspect-ratio:4/3} .vehicle-dialog{width:min(930px,100%)}.vehicle-options{grid-template-columns:repeat(3,minmax(0,1fr))}@media(max-width:650px){.vehicle-options{grid-template-columns:1fr;gap:8px}.vehicle-card{padding:10px;gap:5px}.vehicle-glyph{font-size:30px}}
 
-#field { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='21' height='21' viewBox='0 0 21 21'%3E%3Cpath d='M10 2v5m0 6v5M2 10h5m6 0h5' stroke='%2310181c' stroke-width='3'/%3E%3Cpath d='M10 2v5m0 6v5M2 10h5m6 0h5' stroke='%23e1eddb' stroke-width='1'/%3E%3C/svg%3E") 10 10, crosshair; }
+#field { cursor: none; }
+#field[data-air-aim="true"] { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='21' height='21' viewBox='0 0 21 21'%3E%3Cpath d='M10 2v5m0 6v5M2 10h5m6 0h5' stroke='%2310181c' stroke-width='3'/%3E%3Cpath d='M10 2v5m0 6v5M2 10h5m6 0h5' stroke='%23e1eddb' stroke-width='1'/%3E%3C/svg%3E") 10 10, crosshair; }
+
+#fullscreen{position:absolute;z-index:8;right:12px;top:12px;padding:7px 10px;font-size:12px;background:#142236df;border-color:#70849d}
+#battlefield:fullscreen{width:100vw;height:100vh;background:#111b1b;overflow:hidden}
+html[data-layout] #battlefield:fullscreen #field,#battlefield:fullscreen #field{width:100%;height:100%;max-width:none;margin:0;aspect-ratio:auto;border:0}
+#battlefield:fullscreen #combatOverlay{top:14px}
+#battlefield:fullscreen #weapons{bottom:12px}
+
+#battlefield:fullscreen,#battlefield:fullscreen *{cursor:none!important}#battlefield:fullscreen #fullscreen{display:none}
+
+/* Cooldowns and resources live inside ability icons. */
+#weapons #smokeResource,#weapons #towResource,#weapons #airResource{display:none!important}
+#weapons .weapon-button{overflow:visible;isolation:isolate}
+.cooldown-disc{position:absolute;inset:5px;border-radius:50%;z-index:2;pointer-events:none;background:conic-gradient(from -90deg,rgba(200,226,246,.44) var(--cooldown-fill,0deg),rgba(5,12,20,.38) 0);box-shadow:inset 0 0 0 1px #c4dff133}
+.cooldown-disc[hidden],.charge-count[hidden],.smoke-consumed[hidden]{display:none!important}
+.charge-count{position:absolute;z-index:5;top:-15px;left:50%;transform:translateX(-50%);padding:1px 5px;border-radius:4px;background:#101c2def;color:#e6eef8;font:600 11px system-ui;white-space:nowrap;pointer-events:none}
+.smoke-consumed{position:absolute;z-index:2;top:0;left:0;right:0;border-radius:4px 4px 0 0;background:#07101bc7;border-bottom:1px solid #a6c9d7aa;pointer-events:none;transition:height .1s linear}
+#weapons .weapon-button kbd{z-index:4}
+
+@property --cooldown-fill{syntax:'<angle>';inherits:false;initial-value:0deg}
+.cooldown-disc{transition:--cooldown-fill .1s linear}
