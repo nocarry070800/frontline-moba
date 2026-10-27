@@ -23,6 +23,10 @@
       // Пауза между волнами пехоты, секунды.
       interval: 20,
       regular: ["rifle", "HAT", "rifle", "sniper"],
+      // 1v1: только дополнительные снайперы с каждой захваченной турели.
+      duelSniperPerTurret: 1,
+      duelSniperPerCycle: 1,
+      // Бонусы прежней центральной турели в 2v2.
       bonusRifle: 1,
       bonusSniper: 1,
       bonusHAT: 1,
