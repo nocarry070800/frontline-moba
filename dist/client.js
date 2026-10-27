@@ -31,7 +31,7 @@ function updateApacheHud(s){
  $('smokeFuel').textContent=p.tank.flaresUntil>s.time?'Ловушки активны':p.flareLeft>0?'Ловушки: '+Math.ceil(p.flareLeft)+' с':'Тепловые ловушки готовы';
  $('airResource').hidden=false;$('airText').textContent=p.airLeft>0?'Воздух–воздух: '+Math.ceil(p.airLeft)+' с':'Воздух–воздух готовы';$('airbar').value=1-p.airLeft/air.interval;
  $('loadedShellIcon').setAttribute('href',p.weapon==='ChainGun'?'#icon-he':p.weapon==='AirMissiles'?'#icon-air-air':'#icon-missile-down');
- if(p.weapon==='AirMissiles'){$('ammoText').textContent='Ракета воздух–воздух';$('reloadbar').value=1-p.airLeft/air.interval;$('weaponInfo').textContent='Воздух–воздух: удерживайте прицел на вертолёте 1 с · квадрат — ЛКМ для пуска';}
+ if(p.weapon==='AirMissiles'){$('ammoText').textContent='Ракета воздух–воздух';$('reloadbar').value=1-p.airLeft/air.interval;$('weaponInfo').textContent='Воздух–воздух: удерживайте линию от носа на вертолёте 1 с · квадрат — ЛКМ для пуска';}
  else if(p.weapon==='ChainGun'&&!barrageAim)$('weaponInfo').textContent='30-мм HEAT: пехота '+Math.round((cfg.weapons.ChainGun.damageInfantry??cfg.weapons.ChainGun.damage)*p.heBonus)+' · броня '+Math.round((cfg.weapons.ChainGun.damageArmor??cfg.weapons.ChainGun.damage)*p.heBonus)+' · без уклонения пехоты';
  if(p.overObstacle)$('weaponInfo').textContent='Над препятствием — огонь заблокирован';const zone=(s.repairZones||[]).find(z=>z.team===p.team&&distance(z,p.tank)<=z.r);$('recovery').textContent=zone?'Ремонтная площадка: +'+zone.rate+' HP/с':'Восстановление HP — на базе или от союзного Bradley';
 }

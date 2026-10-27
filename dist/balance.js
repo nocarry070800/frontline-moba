@@ -360,12 +360,12 @@
       hullTurnDegrees: 110,
       turretTurnDegrees: 180,
       // Разгон и торможение: единицы карты/с². Активного и пассивного ремонта нет.
-      acceleration: 180,
+      acceleration: 480,
       braking: 260,
       // Резкая смена курса больше этого угла сбрасывает скорость.
       turnSlowDegrees: 35,
       // Минимальная доля сохранённой скорости при резком боковом/обратном манёвре.
-      turnSpeedRetention: 0.35,
+      turnSpeedRetention: 0.97,
       weapons: {
         ChainGun: {
           damageType: "HEAT",
