@@ -58,7 +58,7 @@ function install(Game,{B,distance,clamp,angleDiff,containingBush,vehicleConfig,v
  wrap('faceApache',function(p,desired,dt){const turn=p.tank.hullTurnSpeed,skill=get(p,'aTurn');if(skill&&state(p).still>0)p.tank.hullTurnSpeed*=1+skill.percent/100;try{return old.faceApache.call(this,p,desired,dt);}finally{p.tank.hullTurnSpeed=turn;}});
  wrap('profile',function(a,b){const w=old.profile.call(this,a,b),p=a.kind==='tank'?this.owner(a):null;
    if(a.attackSlowUntil>this.time)w.interval/=a.attackSlowFactor??1;
-   if(!p)return w;const st=state(p),spin=get(p,'bSpin'),over=get(p,'bOverdrive');
+   if(!p)return w;let bonus=1;if(['AP','HE'].includes(p.weapon))bonus=p.cannonDamageBonus??(get(p,'bStabilize')?1.25:1);if(p.weapon==='ChainGun'&&get(p,'aGunMove'))bonus=1.3;if(p.weapon==='Missiles'&&get(p,'aPass'))bonus=1.3;for(const key of ['damage','damageArmor','damageInfantry'])if(Number.isFinite(w[key]))w[key]*=bonus;const st=state(p),spin=get(p,'bSpin'),over=get(p,'bOverdrive');
    if(spin&&['AP','HE'].includes(p.weapon))w.interval/=1+spin.percent/100*clamp(st.chain/spin.ramp,0,1);
    if(over&&st.overdriveUntil>this.time&&['AP','HE','MG'].includes(p.weapon))w.interval/=1+over.percent/100;
    return w;
@@ -109,7 +109,7 @@ function install(Game,{B,distance,clamp,angleDiff,containingBush,vehicleConfig,v
    if(!st.moved)st.still+=dt;else st.still=0;if(!st.moved)st.flight=0;st.moved=false;
    const bush=get(p,'bBush');if(p.vehicle!=='tank')t.vision=p.baseTalentVision*(bush&&st.still>=bush.prepare&&containingBush(t,this.bushes)?1+bush.percent/100:1);
    p.smokeCapacity=B.smoke.capacity;p.smokeConcentrationMultiplier=get(p,'bDense')?.concentration??1;
-   p.fireOnMove=p.vehicle==='tank'?p.fireOnMove:p.vehicle==='bradley'?!!get(p,'bStabilize'):p.weapon==='ChainGun'?!!get(p,'aGunMove'):p.weapon==='Missiles'&&!!get(p,'aPass')&&st.flight>=get(p,'aPass').prepare;
+   p.fireOnMove=true;
    if(t.hp<=0){p.pairedMissile=null;st.flight=st.still=st.chain=0;st.focusHits=0;}
    old.updatePlayer.call(this,p,dt);if(p.vehicle==='apache'&&!st.moved)t.airSpeed=0;
    if(p.pairedMissile&&this.time>=p.pairedMissile.at){const pair=p.pairedMissile;p.pairedMissile=null;const target=this.all().find(u=>u.id===pair.target);if(t.hp>0&&!p.repair&&p.stunnedUntil<=this.time&&!this.overObstacle(p)&&p.weapon==='Missiles'&&target&&this.visible(p.team,target)&&Math.abs(angleDiff(Math.atan2(target.y-t.y,target.x-t.x),t.angle))<.045){const side=p.missileSide;p.missileSide*=-1;const x=t.x+Math.cos(t.angle)*12-Math.sin(t.angle)*15*side,y=t.y+Math.sin(t.angle)*12+Math.cos(t.angle)*15*side,angle=Math.atan2(target.y-y,target.x-x);this.shots.push({...pair.shot,id:++this.id,createdAt:this.time,x,y,vx:Math.cos(angle),vy:Math.sin(angle),ignored:[],tested:[]});this.recordRecoil(t,'Missiles',t.angle);}}

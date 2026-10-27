@@ -67,8 +67,7 @@ class VisionMeshes {
  }
 }
 class TowCamera{
- constructor(){this.owner=null;this.following=false;this.returning=false;this.center=null;}
- update(state,dt){const owner=state.me.tank.id,tank=state.me.tank;if(this.owner!==owner||state.selection?.active){this.owner=owner;this.following=false;this.returning=false;this.center={x:tank.x,y:tank.y};}const missile=state.shots.find(s=>s.ammo==='TOW'&&s.owner===owner&&!s.pending&&!s.autonomous&&s.guiding!==false);if(missile){this.center={x:missile.x,y:missile.y};this.following=true;this.returning=false;}else if(this.following){this.following=false;this.returning=true;}if(this.returning){const k=1-Math.exp(-5*Math.min(.1,Math.max(0,dt)));this.center.x+=(tank.x-this.center.x)*k;this.center.y+=(tank.y-this.center.y)*k;if(Math.hypot(tank.x-this.center.x,tank.y-this.center.y)<1)this.returning=false;}if(!missile&&!this.returning)this.center={x:tank.x,y:tank.y};return {...this.center,locked:!!missile||this.returning};}
+ update(state,dt){const tank=state.me.tank;return {x:tank.x,y:tank.y,locked:false};}
 }
 class NetworkView{
  constructor({delay=0.1}={}){this.delay=delay;this.frames=[];this.latest=null;this.renderTime=null;}

@@ -278,8 +278,8 @@
         [
           {
             "id": "bStabilize",
-            "name": "Стабилизатор автопушки",
-            "text": "AP, HE и пулемёт стреляют на ходу."
+            "name": "Усиленные боеприпасы",
+            "text": "Урон AP и HE +25%."
           },
           {
             "id": "bTowMove",
@@ -434,8 +434,8 @@
         [
           {
             "id": "aPass",
-            "name": "Боевой заход",
-            "text": "После {prepare} с полёта первый пуск ПТ-ракеты доступен без остановки.",
+            "name": "Тяжёлая боевая часть",
+            "text": "Урон противотанковых ракет +30%.",
             "prepare": 3
           },
           {
@@ -503,8 +503,8 @@
           },
           {
             "id": "aGunMove",
-            "name": "Проход над целью",
-            "text": "Пушка стреляет на ходу. Нос должен быть направлен на цель."
+            "name": "Усиленная 30-мм лента",
+            "text": "Урон 30-мм пушки +30%."
           }
         ],
         // Уровень 9 — левый / правый выбор
@@ -817,8 +817,8 @@
     // Сколько секунд после выстрела куст не скрывает стрелявшего.
     concealment: { shotRevealSeconds: 2 },
     feedback: {
-      bradleyShotShake: { strength: 0.65, range: 420, duration: 0.14 },
-      apacheGunShake: { strength: 0.45, range: 350, duration: 0.12 },
+      bradleyShotShake: { strength: 1.45, range: 420, duration: 0.14 },
+      apacheGunShake: { strength: 1.1, range: 350, duration: 0.12 },
       tankShotShake: { strength: 2.2, range: 700, duration: 0.28 }
     },
     xp: {
