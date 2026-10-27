@@ -336,36 +336,37 @@
       radius: 29,
       vision: 480,
       range: 175,
-      speed: 200,
+      speed: 150,
       reverseFactor: 1,
       hullTurnDegrees: 110,
       turretTurnDegrees: 180,
-      repair: {
-        warmup: 4,
-        hpPerSecond: 20,
-        cancelSeconds: 1,
-        hitStunSeconds: 3
-      },
+      // Разгон и торможение: единицы карты/с². Активного и пассивного ремонта нет.
+      acceleration: 180,
+      braking: 260,
+      // Резкая смена курса больше этого угла сбрасывает скорость.
+      turnSlowDegrees: 35,
+      // Минимальная доля сохранённой скорости при резком боковом/обратном манёвре.
+      turnSpeedRetention: 0.35,
       weapons: {
         ChainGun: {
           damageType: "HEAT",
           // Урон по пехоте до брони. Талант HEAT усиливает оба значения.
           damageInfantry: 15,
           // Урон по технике и строениям до применения armor.HEAT.
-          damageArmor: 15,
+          damageArmor: 10,
           interval: 0.1,
           speed: 800,
           radius: 16
         },
         Missiles: {
           damageType: "AP",
-          damage: 320,
+          damage: 250,
           interval: 2,
           speed: 520,
           range: 175
         },
         Barrage: {
-          damageType: "HE",
+          damageType: "AP",
           damage: 45,
           cooldown: 35,
           count: 24,
@@ -381,7 +382,7 @@
         // 6 — ракета только по воздушным целям. Перезарядка идёт при любом оружии.
         AirMissiles: {
           damageType: "AP",
-          damage: 400,
+          damage: 250,
           interval: 12,
           speed: 650,
           range: 480,
@@ -479,10 +480,10 @@
         // Уровень 7 — левый / правый выбор
         [
           {
-            "id": "aRepairFly",
-            "name": "Мобильный ремонт",
-            "text": "Можно лететь во время ремонта со скоростью {percent}%. Огонь отменяет ремонт.",
-            "percent": 50
+            "id": "aAcceleration",
+            "name": "Ускоренный разгон",
+            "text": "Разгон после остановки быстрее на {percent}%.",
+            "percent": 40
           },
           {
             "id": "aRearm",

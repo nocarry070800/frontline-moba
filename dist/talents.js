@@ -30,9 +30,9 @@ function install(Game,{B,distance,clamp,angleDiff,containingBush,vehicleConfig,v
    if(cmd.type==='move'&&Number.isFinite(cmd.x)&&Number.isFinite(cmd.y)&&p.tank.hp>0&&p.stunnedUntil<=this.time){
      const drive=get(p,'bDrive'),reverse=cmd.reverse===true;
      if(drive&&st.reverse!==undefined&&st.reverse!==reverse&&this.time>=st.driveReady){st.boostUntil=this.time+drive.duration;st.driveReady=this.time+drive.cooldown;}st.reverse=reverse;
-     if(p.repair&&get(p,'aRepairFly')){const repair=p.repair;p.repair=null;old.command.call(this,id,cmd);p.repair=repair;return;}
+     
    }
-   if(p.repair&&get(p,'aRepairFly')&&['attack','weapon','barrage'].includes(cmd.type))p.repair=null;
+   
    if(['stop','weapon','move'].includes(cmd.type))p.pairedMissile=null;
    return old.command.call(this,id,cmd);
  });
@@ -47,7 +47,7 @@ function install(Game,{B,distance,clamp,angleDiff,containingBush,vehicleConfig,v
  wrap('move',function(u,target,dt,stop=0,reverse=false){const p=u.kind==='tank'?this.owner(u):null,st=p?state(p):null;let factor=1;const speed=u.speed;
    if(u.slowUntil>this.time)factor*=u.slowFactor??1;
    if(p){const escape=get(p,'aEscape'),drive=get(p,'bDrive');if(st.boostUntil>this.time)factor*=1+(escape?.percent??drive?.percent??0)/100;
-     if(p.repair&&get(p,'aRepairFly'))factor*=get(p,'aRepairFly').percent/100;
+     
      if(this.canTowMove(p))factor*=get(p,'bTowMove').percent/100;
      if(reverse&&p.smokeHeld&&get(p,'bSmokeMove'))factor*=1+get(p,'bSmokeMove').percent/100;
    }
@@ -111,7 +111,7 @@ function install(Game,{B,distance,clamp,angleDiff,containingBush,vehicleConfig,v
    p.smokeCapacity=B.smoke.capacity;p.smokeConcentrationMultiplier=get(p,'bDense')?.concentration??1;
    p.fireOnMove=p.vehicle==='tank'?p.fireOnMove:p.vehicle==='bradley'?!!get(p,'bStabilize'):p.weapon==='ChainGun'?!!get(p,'aGunMove'):p.weapon==='Missiles'&&!!get(p,'aPass')&&st.flight>=get(p,'aPass').prepare;
    if(t.hp<=0){p.pairedMissile=null;st.flight=st.still=st.chain=0;st.focusHits=0;}
-   old.updatePlayer.call(this,p,dt);
+   old.updatePlayer.call(this,p,dt);if(p.vehicle==='apache'&&!st.moved)t.airSpeed=0;
    if(p.pairedMissile&&this.time>=p.pairedMissile.at){const pair=p.pairedMissile;p.pairedMissile=null;const target=this.all().find(u=>u.id===pair.target);if(t.hp>0&&!p.repair&&p.stunnedUntil<=this.time&&!this.overObstacle(p)&&p.weapon==='Missiles'&&target&&this.visible(p.team,target)&&Math.abs(angleDiff(Math.atan2(target.y-t.y,target.x-t.x),t.angle))<.045){const side=p.missileSide;p.missileSide*=-1;const x=t.x+Math.cos(t.angle)*12-Math.sin(t.angle)*15*side,y=t.y+Math.sin(t.angle)*12+Math.cos(t.angle)*15*side,angle=Math.atan2(target.y-y,target.x-x);this.shots.push({...pair.shot,id:++this.id,createdAt:this.time,x,y,vx:Math.cos(angle),vy:Math.sin(angle),ignored:[],tested:[]});this.recordRecoil(t,'Missiles',t.angle);}}
  });
 }
