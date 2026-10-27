@@ -14,6 +14,8 @@
     levels: [0, 1200, 3000, 6000, 9000, 12000, 15000, 25000, 30000, 40000],
   
     // Центральная точка в 1v1. Радиус обзора берётся из structures.central.vision.
+    // Смещение боковой турели вверх от второй башни NATO; Soviet зеркально.
+    duelOutposts: { towerOffsetY: 380 },
     duelPoint: { initialSpawnSeconds: 120, visionSeconds: 60, cooldownSeconds: 60, xp: 3000 },
 
     // Волны пехоты и подкрепления за захваченную центральную турель.

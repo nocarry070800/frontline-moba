@@ -41,7 +41,7 @@ class Game{
  setupDuelObjectives(){
  this.structures=this.structures.filter(u=>u!==this.turret);this.turret.hp=0;this.centralInitialPending=false;this.centralRespawnAt=null;
  this.point={...this.point,mode:'vision',available:false,activeUntil:null,respawnAt:B.duelPoint.initialSpawnSeconds};
- const tower=this.structures.find(u=>u.kind==='tower'&&u.team===0&&u.lane===0&&u.number===2),origin={x:tower.x,y:tower.y-160};
+ const tower=this.structures.find(u=>u.kind==='tower'&&u.team===0&&u.lane===0&&u.number===2),origin={x:tower.x,y:tower.y-(B.duelOutposts?.towerOffsetY??380)};
  for(const mirrored of [false,true]){const mirror=p=>mirrored?{x:W-p.x,y:H-p.y}:p,position=mirror(origin);this.structures.push(this.entity({kind:'turret',sideObjective:true,cycle:0,captureTeam:null,captureProgress:0,contested:false,respawnAt:null,team:-1,...position,r:22,hp:B.structures.central.hp,armor:B.structures.central.armor,vision:B.structures.central.vision,range:B.structures.central.range,cd:0}));}
  this.covers=[...this.covers];this.bushes=[...this.bushes];
  for(const mirrored of [false,true]){const mirror=p=>mirrored?{x:W-p.x,y:H-p.y}:p;this.bushes.push({...mirror({x:origin.x+90,y:origin.y-45}),r:34,id:-500-(mirrored?1:0)});for(const [i,offset] of [[0,[-65,55]],[1,[70,65]]])this.covers.push({...mirror({x:origin.x+offset[0],y:origin.y+offset[1]}),r:23,id:-600-(mirrored?2:0)-i,kind:'cover',hp:Infinity});}
