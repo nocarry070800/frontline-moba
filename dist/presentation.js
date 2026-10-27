@@ -94,6 +94,6 @@ function recoilPose(u,time){
  const body=u.vehicle==='apache'?4.5:u.vehicle==='bradley'?0:u.fireAmmo==='MG'?.15:.8;
  return {x:-Math.cos(angle)*body*kick,y:-Math.sin(angle)*body*kick,barrel:(u.vehicle==='bradley'?(u.fireAmmo==='MG'?1:3):u.fireAmmo==='MG'?1:11)*kick,pitch:u.vehicle==='apache'?-.35*kick:0};
 }
-function screenShake(events,time,duration=.28){let x=0,y=0;for(const e of events||[]){const age=time-e.time;if(age<0||age>=duration)continue;const strength=e.strength*(1-age/duration)**2,phase=(e.id%97)*1.7;x+=Math.cos(age*115+phase)*strength;y+=Math.sin(age*139+phase)*strength*.65;}const cap=4;return {x:Math.max(-cap,Math.min(cap,x)),y:Math.max(-cap,Math.min(cap,y))};}
+function screenShake(events,time,duration=.28){let x=0,y=0;for(const e of events||[]){const age=time-e.time,life=e.duration??duration;if(age<0||age>=life)continue;const strength=e.strength*(1-age/life)**2,phase=(e.id%97)*1.7;x+=Math.cos(age*115+phase)*strength;y+=Math.sin(age*139+phase)*strength*.65;}const cap=4;return {x:Math.max(-cap,Math.min(cap,x)),y:Math.max(-cap,Math.min(cap,y))};}
 const api={screenShake,recoilPose,VisionMeshes,TowCamera,repairProgress,announcementText,captureRadius,armorTier,structureLabel,NetworkView};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.FrontlinePresentation=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
