@@ -42,3 +42,5 @@ html[data-layout] #battlefield:fullscreen #field,#battlefield:fullscreen #field{
 
 @property --cooldown-fill{syntax:'<angle>';inherits:false;initial-value:0deg}
 .cooldown-disc{transition:--cooldown-fill .1s linear}
+
+#field[data-air-aim="true"]{cursor:none}

@@ -74,7 +74,7 @@ function install(Game,{B,distance,clamp,angleDiff,containingBush,vehicleConfig,v
    }
    if(shot.ammo==='ChainGun'){const focus=get(p,'aFocus');if(focus){if(st.focusId!==b.id||this.time-st.focusAt>focus.reset){st.focusId=b.id;st.focusHits=0;}const mult=1+Math.min(focus.max,st.focusHits*focus.step)/100;shot.damage*=mult;shot.damageArmor*=mult;shot.damageInfantry*=mult;}const sup=get(p,'aSuppress');if(sup)shot.moveSuppress={factor:1-sup.percent/100,duration:sup.duration};}
    if(shot.ammo==='Missiles'){
-     st.flight=0;const pair=get(p,'aPair');if(pair){shot.damage*=pair.damagePercent/100;p.pairedMissile={at:this.time+pair.delay,target:b.id,shot:{...shot},angle:a.angle};}
+     st.flight=0;const pair=get(p,'aPair');if(pair){shot.damage*=pair.damagePercent/100;p.pairedMissile={at:this.time+pair.delay,target:b.id,freeAim:b.id===undefined,shot:{...shot},angle:a.angle};}
      const guide=get(p,'aGuided');if(guide){shot.targetId=b.id;shot.guiding=true;shot.homingTurnSpeed=guide.turn*Math.PI/180;}
      if(p.pairedMissile)p.pairedMissile.shot={...shot};
    }
@@ -112,7 +112,7 @@ function install(Game,{B,distance,clamp,angleDiff,containingBush,vehicleConfig,v
    p.fireOnMove=true;
    if(t.hp<=0){p.pairedMissile=null;st.flight=st.still=st.chain=0;st.focusHits=0;}
    old.updatePlayer.call(this,p,dt);if(p.vehicle==='apache'&&!st.moved)t.airSpeed=0;
-   if(p.pairedMissile&&this.time>=p.pairedMissile.at){const pair=p.pairedMissile;p.pairedMissile=null;const target=this.all().find(u=>u.id===pair.target);if(t.hp>0&&!p.repair&&p.stunnedUntil<=this.time&&!this.overObstacle(p)&&p.weapon==='Missiles'&&target&&this.visible(p.team,target)&&Math.abs(angleDiff(Math.atan2(target.y-t.y,target.x-t.x),t.angle))<.045){const side=p.missileSide;p.missileSide*=-1;const x=t.x+Math.cos(t.angle)*12-Math.sin(t.angle)*15*side,y=t.y+Math.sin(t.angle)*12+Math.cos(t.angle)*15*side,angle=Math.atan2(target.y-y,target.x-x);this.shots.push({...pair.shot,id:++this.id,createdAt:this.time,x,y,vx:Math.cos(angle),vy:Math.sin(angle),ignored:[],tested:[]});this.recordRecoil(t,'Missiles',t.angle);}}
+   if(p.pairedMissile&&this.time>=p.pairedMissile.at){const pair=p.pairedMissile;p.pairedMissile=null;const target=this.all().find(u=>u.id===pair.target)||(pair.freeAim?{x:t.x+Math.cos(t.angle)*1000,y:t.y+Math.sin(t.angle)*1000}:null);if(t.hp>0&&!p.repair&&p.stunnedUntil<=this.time&&!this.overObstacle(p)&&p.weapon==='Missiles'&&target&&(pair.freeAim||this.visible(p.team,target))&&Math.abs(angleDiff(Math.atan2(target.y-t.y,target.x-t.x),t.angle))<.045){const side=p.missileSide;p.missileSide*=-1;const x=t.x+Math.cos(t.angle)*12-Math.sin(t.angle)*15*side,y=t.y+Math.sin(t.angle)*12+Math.cos(t.angle)*15*side,angle=t.angle;this.shots.push({...pair.shot,id:++this.id,createdAt:this.time,x,y,vx:Math.cos(angle),vy:Math.sin(angle),ignored:[],tested:[]});this.recordRecoil(t,'Missiles',t.angle);}}
  });
 }
 const api={get,options,barrage,install};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.FrontlineTalents=api;
