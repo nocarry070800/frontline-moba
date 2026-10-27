@@ -52,7 +52,19 @@ function updateTalentHud(s){
  if(p.stocks?.tow)$('towText').textContent='TOW: '+p.stocks.tow.charges+'/'+p.stocks.tow.max+(p.stocks.tow.next?' · '+Math.ceil(p.stocks.tow.next)+' с':'');
 }
 function drawAirLock(s){const lock=s.me.airLock;if(!lock)return;const t=s.entities.find(u=>u.id===lock.id);if(!t)return;const ready=lock.ready&&s.me.airLeft<=0&&s.me.switchLeft<=0,size=ready?t.r+12:t.r+12+45*(1-lock.progress);ctx.save();ctx.translate(t.x,t.y);if(!ready)ctx.rotate(Math.PI/4);ctx.strokeStyle=ready?'#b9f6a4':'#f0ce7c';ctx.lineWidth=1.7;ctx.strokeRect(-size,-size,size*2,size*2);ctx.restore();}
-function drawManualAim(s){const t=s.me.tank;if(t.hp<=0||s.selection?.active)return;const a=t.vehicle==='apache'?t.angle:t.turret,o=t.vehicle==='apache'?t:tankPivot(t),m=t.vehicle==='apache'?14:t.vehicle==='bradley'?28:44,length=65,x=o.x+Math.cos(a)*m,y=o.y+Math.sin(a)*m,ex=x+Math.cos(a)*length,ey=y+Math.sin(a)*length;ctx.save();const g=ctx.createLinearGradient(x,y,ex,ey);g.addColorStop(0,'rgba(218,242,205,.8)');g.addColorStop(.5,'rgba(218,242,205,.3)');g.addColorStop(1,'rgba(218,242,205,0)');ctx.strokeStyle=g;ctx.lineWidth=1.5;ctx.setLineDash([6,5]);ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(ex,ey);ctx.stroke();ctx.restore();}
+function drawManualAim(s){
+ const p=s.me,t=p.tank;if(t.hp<=0||s.selection?.active)return;
+ const a=t.vehicle==='apache'?t.angle:t.turret,o=t.vehicle==='apache'?t:tankPivot(t),m=t.vehicle==='apache'?14:t.vehicle==='bradley'?28:44,length=65,spread=p.spreadAngle??0;
+ ctx.save();ctx.translate(o.x+Math.cos(a)*m,o.y+Math.sin(a)*m);ctx.rotate(a);
+ const g=ctx.createLinearGradient(0,0,length,0);g.addColorStop(0,'rgba(218,242,205,.8)');g.addColorStop(.5,'rgba(218,242,205,.3)');g.addColorStop(1,'rgba(218,242,205,0)');
+ ctx.strokeStyle=g;ctx.lineWidth=1.5;ctx.setLineDash([6,5]);
+ if(spread>.001){
+   const x=Math.cos(spread)*length,y=Math.sin(spread)*length,fill=ctx.createLinearGradient(0,0,length,0);fill.addColorStop(0,'rgba(218,242,205,.1)');fill.addColorStop(1,'rgba(218,242,205,0)');ctx.fillStyle=fill;
+   ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,length,-spread,spread);ctx.closePath();ctx.fill();
+   ctx.beginPath();ctx.moveTo(x,-y);ctx.lineTo(0,0);ctx.lineTo(x,y);ctx.stroke();
+ }else{ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(length,0);ctx.stroke();}
+ ctx.restore();
+}
 function drawBarrageAim(s){if(s.me.vehicle!=='apache'||s.selection?.active||s.over||s.me.tank.hp<=0){barrageAim=null;return;}const aim=barrageAim||s.me.barrage;if(!aim)return;const w=s.me.barrage?.spec||FrontlineTalents.barrage(s.me,s.balance||B),origin=aim.x===undefined?s.me.tank:aim;ctx.save();ctx.translate(origin.x,origin.y);ctx.rotate(aim.angle);ctx.fillStyle=s.me.overObstacle?'#f16f6f33':'#f0c37133';ctx.strokeStyle=s.me.overObstacle?'#f16f6f':'#f0c371';ctx.lineWidth=2;ctx.setLineDash([8,5]);ctx.fillRect(w.startDistance,-w.width/2,w.length-w.startDistance,w.width);ctx.strokeRect(w.startDistance,-w.width/2,w.length-w.startDistance,w.width);ctx.setLineDash([]);ctx.beginPath();ctx.moveTo(w.startDistance,0);ctx.lineTo(w.length,0);ctx.stroke();ctx.restore();}
 // Render-only flight pose; sampled from displayed positions, including network interpolation.
 const apachePoses=new Map();
