@@ -44,3 +44,12 @@ html[data-layout] #battlefield:fullscreen #field,#battlefield:fullscreen #field{
 .cooldown-disc{transition:--cooldown-fill .1s linear}
 
 #field[data-air-aim="true"]{cursor:none}
+
+#selectApache[hidden],#lobbySides[hidden],#lobbyReset[hidden],.he-consumed[hidden]{display:none!important}
+.vehicle-options{grid-template-columns:repeat(2,minmax(0,1fr))}
+#lobbySides{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin:10px 0}
+#lobbyReset{margin-left:8px;background:#4a3537}
+#experienceHud{grid-column:1/-1;display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center;padding-top:7px;border-top:1px solid #70849d55;color:#d9e7f7;font-size:11px}
+#experienceHud label{display:flex;align-items:center;gap:8px;min-width:0}#experienceHud progress{flex:1;min-width:30px;width:auto;height:7px;accent-color:#b9d291}#experienceHud #xp{white-space:nowrap}
+.he-consumed{position:absolute;z-index:2;top:0;left:0;right:0;background:#102031bd;border-bottom:1px solid #e9ca85aa;pointer-events:none;transition:height .1s linear;border-radius:4px 4px 0 0}
+@media(max-width:550px){.vehicle-options{grid-template-columns:1fr}#experienceHud{gap:6px;font-size:9px}#lobbyReset{margin:8px 0 0}}

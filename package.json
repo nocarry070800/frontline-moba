@@ -3,7 +3,8 @@
   "private": true,
   "version": "0.20.0",
   "scripts": {
-    "start": "node server.cjs"
+    "start": "node server.cjs",
+    "test": "node tests/objectives.cjs && node tests/side-turrets.cjs && node tests/client-smoke.cjs && node tests/network-lobby.cjs"
   },
   "engines": {
     "node": ">=24 <25"
