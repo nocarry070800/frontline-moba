@@ -53,3 +53,8 @@ html[data-layout] #battlefield:fullscreen #field,#battlefield:fullscreen #field{
 #experienceHud label{display:flex;align-items:center;gap:8px;min-width:0}#experienceHud progress{flex:1;min-width:30px;width:auto;height:7px;accent-color:#b9d291}#experienceHud #xp{white-space:nowrap}
 .he-consumed{position:absolute;z-index:2;top:0;left:0;right:0;background:#102031bd;border-bottom:1px solid #e9ca85aa;pointer-events:none;transition:height .1s linear;border-radius:4px 4px 0 0}
 @media(max-width:550px){.vehicle-options{grid-template-columns:1fr}#experienceHud{gap:6px;font-size:9px}#lobbyReset{margin:8px 0 0}}
+
+/* Combat controls must not start browser text selection while firing. */
+main{-webkit-user-select:none;user-select:none}input,textarea,[contenteditable="true"]{-webkit-user-select:text;user-select:text}
+
+#weapons #weaponInfo,#weapons #combatMode,#weapons #ammoText{display:none!important}

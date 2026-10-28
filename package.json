@@ -4,7 +4,7 @@
   "version": "0.20.0",
   "scripts": {
     "start": "node server.cjs",
-    "test": "node tests/objectives.cjs && node tests/side-turrets.cjs && node tests/client-smoke.cjs && node tests/network-lobby.cjs"
+    "test": "node tests/objectives.cjs && node tests/side-turrets.cjs && node tests/wave-formation.cjs && node tests/client-smoke.cjs && node tests/laser-visibility.cjs && node tests/tow-render.cjs && node tests/network-lobby.cjs"
   },
   "engines": {
     "node": ">=24 <25"

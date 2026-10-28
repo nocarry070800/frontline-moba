@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict'),{Game,B}=require('../dist/engine.js');
+function setup(){const g=new Game({requireSelection:true});g.chooseVehicle(0,'bradley');g.confirmVehicle(0);g.players[1].enabled=false;g.structures=[];g.covers=[];g.units=[];g.smokes=[];const p=g.players[0],t=p.tank;t.x=500;t.y=700;t.angle=t.turret=0;t.vision=120;p.weapon='TOW';return {g,p,t};}
+const observer=(id,x,y,vision=120,vehicle)=>({id,kind:'infantry',role:'rifle',vehicle,team:0,x,y,r:6,hp:100,max:100,vision});const near=(a,b)=>assert(Math.abs(a-b)<1e-5,a+' != '+b);
+const {g,p,t}=setup();near(g.towBeam(p).toX,620);g.units=[observer(100,700,700)];near(g.towBeam(p).toX,820);g.units.push(observer(101,900,700));near(g.towBeam(p).toX,1020);g.units.shift();near(g.towBeam(p).toX,620);
+g.units=[];for(let x=700;x<=2300;x+=200)g.units.push(observer(x,x,700,200));near(g.towBeam(p).toX,2400);g.smokes=[{x:1500,y:700,r:30,age:3,density:3}];near(g.towBeam(p).toX,1470);console.log('TOW follows connected ally vision to map edge, stops at a gap or dense smoke');
+g.units=[observer(100,600,700)];g.smokes=[];g.covers=[{id:-1,x:560,y:700,r:10,kind:'cover'}];near(g.towBeam(p).toX,550);g.units[0].vehicle='apache';near(g.towBeam(p).toX,720);
+g.covers=[{id:-1,x:700,y:600,r:25,kind:'cover'}];g.units=[observer(100,700,500,300)];near(g.towBeam(p).toX,700-200*25/Math.sqrt(10000-625));
+// The computed continuous prefix agrees with actual line of sight at sampled points.
+let ended=false,last=0;for(let x=527;x<925;x+=.5){const visible=g.visionSources(0).some(o=>Math.hypot(o.x-x,o.y-700)<=o.vision&&g.clearSight(o,{x,y:700}));if(!visible)ended=true;if(!ended)last=x;}assert(Math.abs(g.towBeam(p).toX-last)<.6);console.log('Vision intervals respect terrain shadows and helicopter vision rules');
+g.covers=[];g.units=[observer(100,700,700,150),observer(101,900,700,150)];near(g.towBeam(p).toX,1050);g.point.team=0;g.point.activeUntil=60;near(g.towBeam(p).toX,1200+B.structures.central.vision);g.time=60;near(g.towBeam(p).toX,1050);
+g.units=[observer(100,492,900,140),observer(101,492,1100,140),observer(102,492,1300,140)];t.turret=Math.PI/2;const beam=g.towBeam(p);near(beam.toY,1400);near(beam.toX,492);console.log('Temporary center vision and rotated beams extend consistently');
