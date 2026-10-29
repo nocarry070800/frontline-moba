@@ -17,6 +17,13 @@ function install(Game,{B,distance,clamp,angleDiff,containingBush,vehicleConfig,v
    if(def.id==='tSmokeCooldown')p.smokeCooldown=def.cooldown;
    if(def.id==='tHull'){const extra=t.max*def.percent/100;t.max+=extra;t.hp=Math.min(t.max,t.hp+extra);}
    if(def.id==='bService'&&get(p,'bServiceRange'))p.skills.bService.radius*=1+get(p,'bServiceRange').percent/100;
+   if(def.id==='arTurn')p.turnSpeed*=1+def.percent/100;
+   if(def.id==='arEngine')t.speed*=1+def.percent/100;
+   if(def.id==='arLoader')p.attackSpeed*=1+def.percent/100;
+   if(def.id==='arHull'){const extra=t.max*def.percent/100;t.max+=extra;t.hp+=extra;}
+   if(def.id==='arRepair')p.repairRate*=1+def.percent/100;
+   if(def.id==='arVision'){p.baseTalentVision*=1+def.percent/100;t.vision=p.baseTalentVision;}
+   if(def.id==='arArmor')t.armor=def.tier;
    if(def.id==='tRepair')p.repairRate*=1+def.percent/100;
    if(def.id==='bServiceRange'){p.skills.bService??={radius:120,percent:50};p.skills.bService.radius*=1+def.percent/100;}
    if(def.id==='bSustain')p.skills.bOverdrive??=Object.fromEntries(Object.entries(B.bradley.talents[8][0]).filter(([k])=>!['id','name','text'].includes(k)));
@@ -40,8 +47,8 @@ function install(Game,{B,distance,clamp,angleDiff,containingBush,vehicleConfig,v
    if(['stop','weapon','move'].includes(cmd.type))p.pairedMissile=null;
    return old.command.call(this,id,cmd);
  });
- wrap('load',function(p,kind,swap){if(p.vehicle==='bradley'&&swap&&get(p,'bFeed')){if(p.cannon.target&&!p.cannon.swap){p.cannon.target=kind;return;}p.cannon={loaded:kind,target:null,left:0,total:0,swap:false};return;}return old.load.call(this,p,kind,swap);});
- wrap('select',function(p,name,internal){const active=get(p,'bFeed')&&['AP','HE'].includes(name)&&['AP','HE'].includes(p.weapon),delay=p.switchDelay;if(active)p.switchDelay=0;try{return old.select.call(this,p,name,internal);}finally{p.switchDelay=delay;}});
+ wrap('load',function(p,kind,swap){if(swap&&(get(p,'bFeed')||get(p,'arFeed'))){if(p.cannon.target&&!p.cannon.swap){p.cannon.target=kind;return;}p.cannon={loaded:kind,target:null,left:0,total:0,swap:false};return;}return old.load.call(this,p,kind,swap);});
+ wrap('select',function(p,name,internal){const active=(get(p,'bFeed')||get(p,'arFeed'))&&['AP','HE'].includes(name)&&['AP','HE'].includes(p.weapon),delay=p.switchDelay;if(active)p.switchDelay=0;try{return old.select.call(this,p,name,internal);}finally{p.switchDelay=delay;}});
  wrap('deployFlares',function(p){const before=this.effects.length;old.deployFlares.call(this,p);if(this.effects.length===before)return;const st=state(p),long=get(p,'aLongFlares'),escape=get(p,'aEscape');if(long){p.tank.flaresUntil=this.time+B.apache.flares.duration*long.factor;const e=this.effects[this.effects.length-1];e.life=e.duration=B.apache.flares.duration*long.factor;}if(escape)st.boostUntil=this.time+escape.duration;consume(p,'flare',B.apache.flares.cooldown);if(p.stocks?.flare)p.flareLeft=p.stocks.flare.charges?0:p.stocks.flare.next;});
  wrap('startBarrage',function(p,angle){const before=p.barrage;old.startBarrage.call(this,p,angle);if(!before&&p.barrage){p.barrage.spec=barrage(p,B);consume(p,'barrage',vehicleWeapons(p).Barrage.cooldown);if(p.stocks?.barrage)p.barrageLeft=p.stocks.barrage.charges?0:p.stocks.barrage.next;}});
  wrap('inVision',function(team,u){if(u.markedUntil?.[team]>this.time){const bush=this.bushAt(u);if(this.all().some(v=>v.team===team&&this.canSpot(v,u,bush)&&this.clearSight(v,u)))return true;}return old.inVision.call(this,team,u);});
@@ -138,3 +145,4 @@ function install(Game,{B,distance,clamp,angleDiff,containingBush,vehicleConfig,v
 }
 const api={get,options,barrage,install};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.FrontlineTalents=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
+

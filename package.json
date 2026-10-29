@@ -4,7 +4,7 @@
   "version": "0.20.0",
   "scripts": {
     "start": "node server.cjs",
-    "test": "node tests/objectives.cjs && node tests/side-turrets.cjs && node tests/wave-formation.cjs && node tests/client-smoke.cjs && node tests/laser-visibility.cjs && node tests/tow-render.cjs && node tests/network-lobby.cjs && node tests/solo-bot.cjs && node tests/outpost-initial.cjs && node tests/new-mechanics.cjs && node tests/progression.cjs"
+    "test": "node tests/objectives.cjs && node tests/side-turrets.cjs && node tests/wave-formation.cjs && node tests/client-smoke.cjs && node tests/laser-visibility.cjs && node tests/tow-render.cjs && node tests/network-lobby.cjs && node tests/solo-bot.cjs && node tests/outpost-initial.cjs && node tests/new-mechanics.cjs && node tests/progression.cjs && node tests/artillery.cjs && node tests/artillery-talents.cjs && node tests/inherited-speed.cjs"
   },
   "engines": {
     "node": ">=24 <25"

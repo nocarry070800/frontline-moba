@@ -58,3 +58,27 @@ html[data-layout] #battlefield:fullscreen #field,#battlefield:fullscreen #field{
 main{-webkit-user-select:none;user-select:none}input,textarea,[contenteditable="true"]{-webkit-user-select:text;user-select:text}
 
 #weapons #weaponInfo,#weapons #combatMode,#weapons #ammoText{display:none!important}
+
+/* Боковая схема в свободной правой части панели. */
+#weapons #artillerySide{position:absolute;right:12px;bottom:20px;width:145px;height:110px;overflow:visible;pointer-events:none}#weapons #artillerySide[hidden]{display:none}#weapons[data-artillery="true"]{padding-right:170px}@media(max-width:650px){#weapons #artillerySide{width:95px;height:80px;right:5px;bottom:24px}#weapons[data-artillery="true"]{padding-right:105px}}
+
+/* Unified right-hand artillery readout, with its own unclipped SVG viewport. */
+#battlefield #weapons[data-artillery="true"]{padding-right:14px;grid-template-columns:200px auto minmax(220px,1fr)}
+#weapons #artilleryPanel{grid-column:3;grid-row:1 / span 2;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;align-self:stretch;overflow:visible}
+#weapons #artilleryPanel[hidden]{display:none!important}
+#weapons #artillerySide{position:static!important;display:block!important;width:150px!important;height:100px!important;overflow:visible;flex-shrink:0}
+#weapons #artilleryRange{display:block;text-align:center;white-space:normal;font-size:12px;line-height:1.5;max-width:260px}
+@media(max-width:900px){#battlefield #weapons[data-artillery="true"]{grid-template-columns:140px auto minmax(160px,1fr)}}
+@media(max-width:650px){#battlefield #weapons[data-artillery="true"]{grid-template-columns:90px 1fr}#weapons #artilleryPanel{grid-column:2;grid-row:auto;justify-self:end}#weapons #artillerySide{height:80px!important;width:120px!important}}
+
+/* Чистая верхняя панель и командные слоты лобби. */
+nav>span,#progress{display:none!important}
+#connection button[aria-pressed="true"]{background:#587ca2;border-color:#c1e5ff;box-shadow:0 0 0 2px #9bd7ff66;color:white}
+.vehicle-dialog{width:min(1000px,100%)}.vehicle-options{grid-template-columns:repeat(3,minmax(0,1fr))}
+#selectionPlayers{margin:12px 0}.lobby-columns{display:grid;grid-template-columns:1fr 1fr;gap:18px;text-align:left}.lobby-team{padding:10px;background:#142435;border:1px solid #5e819c;border-radius:6px}.lobby-team.team-1{border-color:#a16f64}.lobby-team h3{margin:0 0 10px;text-align:center;letter-spacing:2px}.lobby-slot{display:flex;align-items:center;gap:12px;min-height:82px;padding:10px;margin-top:7px;background:#23364a;border:1px solid #52677d;border-radius:4px}.lobby-slot>div:last-child{display:flex;flex-direction:column;gap:4px}.lobby-slot.is-ready{border-color:#92c990}.ready-state{font-size:11px;color:#c9b586}.is-ready .ready-state{color:#a8e19a}.lobby-icon{width:90px;flex:0 0 90px;text-align:center}.lobby-icon svg{width:85px;height:60px;display:block}.lobby-icon .vehicle-glyph{font-size:35px}.empty-slot{color:#8c9cad}.lobby-unassigned{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.lobby-unassigned .lobby-slot{flex:1;font-size:11px}@media(max-width:650px){.lobby-columns{gap:7px}.lobby-slot{gap:5px;padding:5px;min-height:65px;font-size:10px}.lobby-icon{width:50px;flex-basis:50px}.lobby-icon svg{width:50px;height:45px}.vehicle-options{gap:5px}.vehicle-card strong{font-size:13px}}
+
+#connection #mode{display:none!important}#weapons #repair{order:100}
+
+/* Режимы игры по центру верхней панели. */
+#connection{justify-content:center}#connection #joinForm,#connection #netStatus{flex-basis:100%;text-align:center}
+
