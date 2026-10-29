@@ -13,7 +13,7 @@ class VisionMeshes {
   const epoch=state.me.team+':'+state.me.tank.id;
   if(this.epoch!==epoch||state.time<this.time){this.cache.clear();this.epoch=epoch;}
   this.time=state.time;
-  const denseSmoke=state.smokes.filter(f=>f.density*Math.min(f.age/2,1)>=(f.threshold??1.2)),blockers=[...(state.covers||[]),...denseSmoke];
+  const denseSmoke=state.smokes.filter(f=>(f.charge?f.density:f.density*Math.min(f.age/2,1))>=(f.threshold??1.2)),blockers=[...(state.covers||[]),...denseSmoke];
   const revision=blockers.map(b=>b.x+','+b.y+','+b.r).join(';');
   // A new smoke screen or a different map must not retain the old open mask.
   if(revision!==this.revision){this.cache.clear();this.revision=revision;}
