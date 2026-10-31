@@ -1,5 +1,5 @@
 const assert=require('node:assert/strict');const {Game,B,talentOptions}=require('../dist/engine.js');
-function setup(vehicle='littlebird'){const g=new Game({requireSelection:true,random:()=>.5});g.chooseVehicle(0,vehicle);g.confirmVehicle(0);g.covers=[];g.structures=[];g.units=[];g.players[1].enabled=false;const p=g.players[0];p.tank.x=p.tank.y=700;p.tank.angle=p.tank.turret=0;return {g,p,t:p.tank};}
+function setup(vehicle='littlebird'){const g=new Game({requireSelection:true,random:()=>.5});g.chooseVehicle(0,vehicle);g.gain(g.players[0],1e9);g.confirmVehicle(0);g.covers=[];g.structures=[];g.units=[];g.players[1].enabled=false;const p=g.players[0];p.tank.x=p.tank.y=700;p.tank.angle=p.tank.turret=0;return {g,p,t:p.tank};}
 function pick(g,p,row,choice){const level=row===14?15:row+1;p.pending=[level];g.command(0,{type:'upgrade',choice});}
 function shot(g,p){p.tank.cd=0;const n=g.shots.length;g.fire(p.tank,{kind:'ground',team:1,armor:0,x:p.tank.x+1000,y:p.tank.y});return g.shots.slice(n);}
 function hit(g,p,u,amount=10){g.damageCore({ammo:'ChainGun',kind:'MG',player:p.id,owner:p.tank.id,team:p.team,vx:1,vy:0,effectiveRange:100,travelled:0},u,amount);}

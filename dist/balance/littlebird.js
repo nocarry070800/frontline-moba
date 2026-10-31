@@ -11,8 +11,8 @@
   },
   "Missiles": {
     "strength": 1,
-    "length": 12,
-    "width": 4,
+    "length": 24,
+    "width": 8,
     "duration": 0.075
   }
 },
@@ -40,7 +40,7 @@
       "ChainGun": {
         "damageType": "MG",
         // Базовый урон одной пули MG до характеристик, талантов и брони.
-        "damage": 10,
+        "damage": 9,
         // Поля раздельного урона используются типом HEAT; у MG сейчас не применяются.
         "damageInfantry": 6,
         "damageArmor": 6,

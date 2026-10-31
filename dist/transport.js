@@ -1,7 +1,7 @@
 /* Compact render-only network states. Authoritative simulation keeps full precision. */
 (function(root){'use strict';
 const entityFields=['id','kind','team','x','y','r','hp','max','armor','role','vehicle','vision','range','angle','turret','guns','number','lane','repairVisual','stunnedUntil','flaresUntil','fireTime','fireAmmo','fireAngle','fireSide','revealUntil','sideObjective','elevation','level','healthVisible','secondGun','bank','pitch','gunConvergence','lbRocketPods'];
-const shotFields=['tracer','id','createdAt','x','y','r','vx','vy','owner','team','ammo','kind','guiding','pending','autonomous','effectiveRange','travelled','artillery','trailHiddenUntil','height','speed','verticalSpeed'];
+const shotFields=['rangeSpeed','muzzleX','muzzleY','tracer','id','createdAt','x','y','r','vx','vy','owner','team','ammo','kind','guiding','pending','autonomous','effectiveRange','travelled','artillery','trailHiddenUntil','height','speed','verticalSpeed'];
 function pick(source,keys){const out={};for(const k of keys){let v=source[k];if(v&&typeof v==='object')v=Array.isArray(v)?v.map(x=>({...x})):{...v};if(v!==undefined)out[k]=typeof v==='number'?Math.round(v*(k==='vx'||k==='vy'||k==='angle'||k==='turret'?100000:100))/ (k==='vx'||k==='vy'||k==='angle'||k==='turret'?100000:100):v;}return out;}
 function compact(state){const {vision,...out}=state;out.entities=state.entities.map(u=>pick(u,entityFields));out.ruins=state.ruins.map(u=>pick(u,entityFields));out.shots=state.shots.map(u=>pick(u,shotFields));return out;}
 function equal(a,b){return a===b||(a!==null&&b!==null&&typeof a==='object'&&typeof b==='object'&&JSON.stringify(a)===JSON.stringify(b));}
