@@ -1,6 +1,21 @@
 // Little Bird: тестовая машина, два минигана, таланты и столкновения.
 (function(root){const settings={
   "littlebird": {
+      // Вспышки по оружию: strength — сила (0 выключает), length/width — размер, duration — секунды.
+      muzzleFlash: {
+  "ChainGun": {
+    "strength": 1,
+    "length": 18,
+    "width": 6,
+    "duration": 0.055
+  },
+  "Missiles": {
+    "strength": 1,
+    "length": 12,
+    "width": 4,
+    "duration": 0.075
+  }
+},
     "reload": {
       "switchSeconds": 0,
       "shellSwapIntervals": 1
@@ -10,20 +25,23 @@
     "radius": 20,
     "moveRadius": 14,
     "vision": 400,
-    "range": 96,
+    "range": 125,
     "speed": 200,
     "reverseFactor": 0.5,
-    "hullTurnDegrees": 125,
-    "turretTurnDegrees": 125,
+    "hullTurnDegrees": 100,
+    "turretTurnDegrees": 100,
     "acceleration": 480,
     "movementRampSeconds": 0.2,
     "braking": 260,
     "turnSlowDegrees": 35,
     "turnSpeedRetention": 0.97,
     "weapons": {
+      "Missiles": {"damageType":"AP","damage":35,"interval":0.2,"speed":520,"range":175},
       "ChainGun": {
         "damageType": "MG",
+        // Базовый урон одной пули MG до характеристик, талантов и брони.
         "damage": 10,
+        // Поля раздельного урона используются типом HEAT; у MG сейчас не применяются.
         "damageInfantry": 6,
         "damageArmor": 6,
         "interval": 0.04,
@@ -32,9 +50,9 @@
       }
     },
     "minigunReserve": {"capacity":100,"costPerShot":2,"regenPerSecond":8},
-    "flares": {"cooldown":20,"duration":3},
-    // Урон от столкновений: минимальная скорость, доля максимального HP, повторный удар.
-    "collision": {"minSpeed":35,"maxHpPercent":5,"cooldown":0.6},
+    "flares": {"cooldown":20,"duration":0.5,"radius":30},
+    // Урон от столкновений: минимальная скорость удара, HP за единицу скорости, задержка между ударами.
+    "collision": {"minSpeed":35,"damagePerSpeed":1,"cooldown":0.6},
     "talents": [
   [
     {
@@ -116,7 +134,7 @@
     {
       "id": "lbMGArmor",
       "percent": 20,
-      "text": "Получаемый урон от пулемётов уменьшен на 20%",
+      "text": "Получаемый урон от пуль уменьшен на 20%",
       "name": "lbMGArmor"
     }
   ],
@@ -254,11 +272,9 @@
   },
   "level30": {"littlebird":[
   {
-    "id": "lbUnlimited",
-    "name": "Непрерывный огонь",
-    "duration": 5,
-    "cooldown": 60,
-    "text": "7 — 5 секунд без расхода боезапаса, перезарядка 60 секунд"
+    "id": "lbRockets",
+    "name": "Ракетницы",
+    "text": "Открывает скорострельные ракетницы с AP-уроном на клавише 2"
   },
   {
     "id": "lbDash",
@@ -266,7 +282,7 @@
     "duration": 0.3,
     "speedFactor": 2.5,
     "cooldown": 45,
-    "text": "6 — рывок в направлении движения и выпуск ловушек, перезарядка 45 секунд"
+    "text": "Пробел — рывок в направлении движения и выпуск ловушек, перезарядка 45 секунд"
   }
 ]},
   "feedback": {}

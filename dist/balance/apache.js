@@ -1,5 +1,32 @@
 // Apache: характеристики, вооружение, таланты, прицеливание и тряска пушки.
 (function(root){const settings={apache: {
+      // Вспышки по оружию: strength — сила (0 выключает), length/width — размер, duration — секунды.
+      muzzleFlash: {
+  "ChainGun": {
+    "strength": 1,
+    "length": 40,
+    "width": 14,
+    "duration": 0.1
+  },
+  "Missiles": {
+    "strength": 1,
+    "length": 12,
+    "width": 4,
+    "duration": 0.075
+  },
+  "AirMissiles": {
+    "strength": 1,
+    "length": 12,
+    "width": 4,
+    "duration": 0.075
+  },
+  "Barrage": {
+    "strength": 1,
+    "length": 12,
+    "width": 4,
+    "duration": 0.075
+  }
+},
       // Переключение оружия и множитель времени смены AP/HE.
       reload: {
       "switchSeconds": 1,
@@ -25,7 +52,7 @@
       range: 175,
 
       // Скорость движения, единицы карты/с.
-      speed: 200,
+      speed: 150,
 
       // Скорость заднего хода как доля переднего.
       reverseFactor: 1,
@@ -336,12 +363,16 @@
 
       turnSpeedRetention: 0.97,
 
+      // Столкновения: порог скорости удара, HP за ед/с, задержка между ударами.
+      collision: {minSpeed:35, damagePerSpeed:0.1, cooldown:0.6},
       flares: {
         // Восстановление способности/заряда, секунды.
         cooldown: 20,
 
         // Длительность эффекта, секунды.
-        duration: 3
+        duration: 0.5,
+        // Радиус перехвата ракет возле вертолёта, единицы карты.
+        radius: 30
       }
     },weaponAimLines:{apache: {
             "ChainGun": {

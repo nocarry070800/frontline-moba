@@ -229,3 +229,5 @@ html,body,#battlefield,#battlefield *{-webkit-user-select:none;user-select:none}
 #weapons #artilleryPanel{grid-column:1;grid-row:1 / span 3}
 #chatForm button[type=submit]{margin-left:auto;order:3}
 #chatForm #chatScope{order:2}#chatForm #chatInput{order:1;flex-basis:100%}
+
+#statUpgrades[data-hotkeys="true"] button::before{content:attr(data-hotkey);display:block;position:absolute;z-index:5;top:-10px;left:50%;transform:translateX(-50%);width:22px;height:16px;border:1px solid #fff;border-radius:3px;background:#23354a;color:#fff;font:700 13px/16px system-ui,sans-serif;pointer-events:none}

@@ -2,6 +2,27 @@
 (function(root){
   const settings={
 bradley: {
+      // Вспышки по оружию: strength — сила (0 выключает), length/width — размер, duration — секунды.
+      muzzleFlash: {
+  "AP": {
+    "strength": 1,
+    "length": 40,
+    "width": 14,
+    "duration": 0.1
+  },
+  "HE": {
+    "strength": 1,
+    "length": 40,
+    "width": 14,
+    "duration": 0.1
+  },
+  "MG": {
+    "strength": 1,
+    "length": 9,
+    "width": 3,
+    "duration": 0.055
+  }
+},
       // Активный ремонт этой машины: подготовка, HP/с, отмена и оглушение.
       repair: {
       "warmup": 3,
