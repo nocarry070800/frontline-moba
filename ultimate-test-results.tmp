@@ -1,0 +1,51 @@
+
+> frontline-moba@0.20.0 test
+> node tests/objectives.cjs && node tests/side-turrets.cjs && node tests/wave-formation.cjs && node tests/client-smoke.cjs && node tests/laser-visibility.cjs && node tests/tow-render.cjs && node tests/network-lobby.cjs && node tests/solo-bot.cjs && node tests/outpost-initial.cjs && node tests/new-mechanics.cjs && node tests/progression.cjs && node tests/artillery.cjs && node tests/artillery-talents.cjs && node tests/inherited-speed.cjs && node tests/served-assets.cjs && node tests/health.cjs && node tests/stability.cjs && node tests/duel-side.cjs && node tests/slot-jump.cjs && node tests/two-rooms.cjs && node tests/open-lobby.cjs && node tests/spectator.cjs && node tests/multiplayer-bots.cjs && node tests/scoreboard.cjs && node tests/tow-smoke.cjs && node tests/stat-upgrades.cjs && node tests/level30.cjs
+
+1v1: 120 s initial wait, mirrored terrain, contest, 3000 XP, 60 s vision and 60 s cooldown OK
+2v2: legacy center retained, capacity, readiness and vehicle/side persistence OK
+Bradley HE: reserve depletion, empty-fire rejection, passive refill while AP selected and cap OK
+Bottom XP, hidden Apache and lobby controls present
+Both neutral outposts remain beyond turret range plus 60 units of lane clearance
+Tank AP/HE loading starts immediately, preserves total swap time and continues independently of MG
+Side turrets: destroy/capture, additive 0/1/2 wave bonuses, immediate loss, neutral respawn, per-turret cycles, enemy recapture and contest OK
+2v2 central turret follows configured infantry bonuses with snipers disabled
+Snipers remain defined but do not spawn; former sniper bonuses now produce rifle infantry
+HAT spawn in separate rear rows for both sides/lanes, all wave bonuses and obstructed spawn positions; wave sizes unchanged
+Complete client load/UI/draw: solo menu, Bradley HE HUD, active/cooldown point, 2v2 side controls and host restart OK
+Center circle and countdown visible during initial wait, cooldown and active vision
+Tank blue bar tracks only 120mm shell loading/AP-HE swap; yellow tracks every weapon switch including MG
+Neutral turret name/range labels and extra HUD weapon/combat text removed
+Team slots: 2v2 four slots, 1v1 two slots, vehicle diagrams/readiness markup, artillery stats and БМП naming passed
+Injected render error recorded; frame scheduling and later frames continue
+Passive cooldown icons and live tank/BMP side diagrams verified
+Lobby DOM remains stable between updates; lower slot occupancy displayed independently
+Lobby modes 1v1/2v2/3v3 have 2/4/6 fixed undecided slots and matching team slots
+Spectator controls visible, combat HUD hidden and omniscient mode highlighted
+TOW follows connected ally vision to map edge, stops at a gap or dense smoke
+Vision intervals respect terrain shadows and helicopter vision rules
+Temporary center vision and rotated beams extend consistently
+TOW: laser uses vision, no effective range/fade/damage falloff, straight flight after laser break, expires at map edge
+Screen shake rejects invalid impulses and never emits nonfinite transforms
+Ready center has highlighted rings and only occupied capture percentage; opaque frame and UI selection guards present
+HTTP 2v2: all four join unassigned, choose/release/swap sides, enforce capacity and readiness, start, restart permission, preserve sides and reconnect OK
+Solo bot: navigation, visible combat, retreat, respawn, human/network isolation passed
+Solo/1v1 outposts: appear at 3:00, first cycle unchanged, no early ruins/capture; menu/pause and 2v2 unaffected.
+Charge smoke independent timers/density/vision, positional talents, instant feed, repair under fire, passive overdrive, autonomous TOW passed
+30 levels, 28 unique choices, disabled duplicates, both acquisition orders, smoke/TOW/HE capacity, prepared shot and emergency shield passed
+Artillery selection/elevation, independent ballistic range/landing, network fields, no smoke and configured structure damage passed
+Artillery: 28 talent choices, range40/80, shell-swap/feed, armor3, vision50%, MG100%, stationary chains and repeat cap passed
+Projectile velocity inherits actual forward/reverse/lateral movement; range uses intrinsic speed; manual control integrated
+HTTP: every HTML script is served; browser engine starts and vehicle selection works
+Turret health obeys vision; enemy level survives transport; level10 respawn adds 9s
+Fullscreen backing buffer capped at 4 megapixels/4096px; window resolution unchanged
+HTTP 1v1: undecided join, explicit slots, occupancy validation, release, vehicle persistence and start passed
+HTTP: lower slot first and jumps between every slot; mismatched saved room rejected
+Two independent HTTP/SSE matches: 3v3 + 1v1, empty room format reuse, isolated reset and center-facing start/respawn passed
+Public lobby: 10 code-free participants, format3v3, only 6 combatants, spectators do not block start/tick, late spectators and locked live format passed
+Solo 1v1/2v2/3v3 tank bots, spectator side visibility/omniscience and active-player protection passed
+Multiplayer: optional slots, 2 humans vs tank bot, independent bot AI, add/remove validation and human readiness passed
+Scoreboard: K/D/A, structures, last seen levels, late spectator/reconnect and automatic 15s lobby return passed
+Autonomous TOW permanently loses lock in dense smoke; exits straight without reacquiring for mouse and target guidance
+All vehicles: baseline75%, level points, rank cap,135% health and immediate repair completion passed
+Level30 talents: selection,30 stat points, dual cannon, swept interception,9 HAT,5-shot barrage and satellite preview passed

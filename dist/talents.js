@@ -15,12 +15,12 @@ function install(Game,{B,distance,clamp,angleDiff,containingBush,vehicleConfig,v
  P.chooseTalent=function(p,level,choice){const def=(B[p.vehicle]?.talents||B[p.vehicle]?.lateTalents)?.[upgradeIndex(level)]?.[choice];if(!def)return;p.skills??={};const {id,name,text,...params}=def;p.skills[def.id]=params;state(p);const t=p.tank;
    if(['tSmokeStock','bSmokeStock'].includes(def.id))p.smokeTimers.push(0);
    if(def.id==='tSmokeCooldown')p.smokeCooldown=def.cooldown;
-   if(def.id==='tHull'){const extra=t.max*def.percent/100;t.max+=extra;t.hp=Math.min(t.max,t.hp+extra);}
+   if(def.id==='tHull'){const extra=t.max*def.percent/100;t.max+=extra;if(t.hp>0)t.hp=Math.min(t.max,t.hp+extra);}
    if(def.id==='bService'&&get(p,'bServiceRange'))p.skills.bService.radius*=1+get(p,'bServiceRange').percent/100;
    if(def.id==='arTurn')p.turnSpeed*=1+def.percent/100;
    if(def.id==='arEngine')t.speed*=1+def.percent/100;
    if(def.id==='arLoader')p.attackSpeed*=1+def.percent/100;
-   if(def.id==='arHull'){const extra=t.max*def.percent/100;t.max+=extra;t.hp+=extra;}
+   if(def.id==='arHull'){const extra=t.max*def.percent/100;t.max+=extra;if(t.hp>0)t.hp+=extra;}
    if(def.id==='arRepair')p.repairRate*=1+def.percent/100;
    if(def.id==='arVision'){p.baseTalentVision*=1+def.percent/100;t.vision=p.baseTalentVision;}
    if(def.id==='arArmor')t.armor=def.tier;
@@ -32,7 +32,7 @@ function install(Game,{B,distance,clamp,angleDiff,containingBush,vehicleConfig,v
 
    if(def.id==='aFlareStock')stock(p,'flare',def.charges,B.apache.flares.cooldown);
    if(def.id==='aBarrageStock')stock(p,'barrage',def.charges,vehicleWeapons(p).Barrage.cooldown);
-   if(def.id==='bTowStock')stock(p,'tow',def.charges,vehicleWeapons(p).TOW.interval*(1-(get(p,'bReloadTow')?.percent??0)/100));
+   if(def.id==='bTowStock'){const remaining=p.towLeft;stock(p,'tow',def.charges,vehicleWeapons(p).TOW.interval*(1-(get(p,'bReloadTow')?.percent??0)/100));if(remaining>0){p.stocks.tow.charges=Math.max(0,def.charges-1);p.stocks.tow.next=remaining;}}
    if(def.id==='aFlareStock')p.flareLeft=0;if(def.id==='aBarrageStock')p.barrageLeft=0;if(def.id==='bTowStock')p.towLeft=0;
    p.message='Выбран талант: '+def.name+'.';
  };
@@ -104,7 +104,8 @@ function install(Game,{B,distance,clamp,angleDiff,containingBush,vehicleConfig,v
  });
  wrap('projectiles',function(dt){
    // Unguided rocket bodies remain physical; guidance changes only their direction.
-   for(const s of this.shots){if(s.ammo==='Missiles'&&s.guiding){const t=this.all().find(u=>u.id===s.targetId);if(!t||!this.inVision(s.team,t))s.guiding=false;else{const a=Math.atan2(s.vy,s.vx),desired=Math.atan2(t.y-s.y,t.x-s.x),turn=a+clamp(angleDiff(desired,a),-s.homingTurnSpeed*dt,s.homingTurnSpeed*dt);s.vx=Math.cos(turn);s.vy=Math.sin(turn);}}
+   for(const s of this.shots){if(s.ammo==='TOW'&&s.autonomous&&!s.pending&&!s.autonomousLockLost){const target=this.all().find(u=>u.id===(s.cursorGuided?s.autonomousTargetId:s.targetId)&&u.hp>0);if(target&&this.smokes.some(f=>(f.charge?f.density:f.density*Math.min(f.age/2,1))>=(f.threshold??1.2)&&distance(f,target)<=f.r)){s.autonomousLockLost=true;s.autonomousTargetId=null;s.passedAim=true;s.guiding=false;s.laserBroken=true;}}
+   if(s.ammo==='Missiles'&&s.guiding){const t=this.all().find(u=>u.id===s.targetId);if(!t||!this.inVision(s.team,t))s.guiding=false;else{const a=Math.atan2(s.vy,s.vx),desired=Math.atan2(t.y-s.y,t.x-s.x),turn=a+clamp(angleDiff(desired,a),-s.homingTurnSpeed*dt,s.homingTurnSpeed*dt);s.vx=Math.cos(turn);s.vy=Math.sin(turn);}}
      if(s.ammo==='AirMissiles'&&s.proximity){const t=this.all().find(u=>u.id===s.targetId&&u.hp>0);if(t&&distance(s,t)<=s.proximity+t.r){this.damage(s,t,s.damage);this.effect(s.x,s.y,s.proximity,'AP');s.done=true;}}
    }
    this.shots=this.shots.filter(s=>!s.done);const pending=this.shots.filter(s=>s.ammo==='TOW'&&s.pending);old.projectiles.call(this,dt);

@@ -82,3 +82,150 @@ nav>span,#progress{display:none!important}
 /* Режимы игры по центру верхней панели. */
 #connection{justify-content:center}#connection #joinForm,#connection #netStatus{flex-basis:100%;text-align:center}
 
+
+.vehicle-difficulty{font-size:12px;font-weight:600}.vehicle-difficulty.easy{color:#b5d89b}.vehicle-difficulty.medium{color:#e9cf8b}.vehicle-difficulty.hard{color:#e9a18f}
+
+/* Одинаковая высота строки схем в карточках выбора. */
+.vehicle-card>.vehicle-glyph,.vehicle-card>svg{height:45px;min-height:45px;flex:0 0 45px}.vehicle-card>svg{width:110px;overflow:visible}
+
+#playerHealthHud{grid-column:1/-1;display:flex;align-items:center;gap:12px}#playerHealthHud progress{flex:1;min-width:20px;width:auto;height:10px;accent-color:#93cf99}#playerHealthText{white-space:nowrap;font-size:11px;color:#d9ead9}
+
+/* Avoid an additional GPU blur surface over the fullscreen canvas. */
+#battlefield:fullscreen #weapons{backdrop-filter:none;-webkit-backdrop-filter:none}
+
+#passiveTalents{grid-column:2;display:flex;flex-wrap:wrap;gap:7px;align-items:center}#passiveTalents[hidden]{display:none}.passive-talent{position:relative;width:64px;min-height:82px;padding:5px;border:1px solid #7890a0;border-radius:5px;background:#24384d;text-align:center;isolation:isolate}.passive-talent svg{display:block;width:34px;height:34px;margin:auto;fill:none;stroke:#c3d6e5;stroke-width:2.5}.passive-talent small,.passive-talent b{position:relative;z-index:2;display:block;font-size:9px;line-height:1.2}.passive-talent b{margin-top:4px;font-size:8px;color:#c8d2a6}.passive-cooldown{position:absolute;inset:3px;border-radius:50%;background:conic-gradient(#13203099 var(--cooldown-fill),#899bab66 0);z-index:1;pointer-events:none}.passive-cooldown[hidden]{display:none}.passive-talent.is-active{border-color:#c8e89a;box-shadow:0 0 7px #a6de8544}@media(max-width:650px){#passiveTalents{grid-column:1/-1}.passive-talent{width:56px;min-height:70px}}
+
+#vehicleSideGlyph{display:flex;align-items:center;justify-content:center;width:150px;height:100px;font-size:65px;line-height:1;white-space:nowrap}#vehicleSideGlyph[hidden]{display:none}#vehicleGlyphBarrel{display:inline-block;margin-left:-3px}#artilleryPanel[data-kind="tank"] #artillerySide,#artilleryPanel[data-kind="bradley"] #artillerySide{display:none!important}
+
+
+.lobby-columns{grid-template-columns:1fr 1fr 1fr;gap:12px}.lobby-pending{border-color:#777;background:#242b32}.lobby-waiter{display:flex;align-items:center;gap:10px;padding:10px;margin-top:7px;background:#303942;border-radius:4px}.lobby-waiter>div:last-child{display:flex;flex-direction:column;gap:4px}button.lobby-slot{width:100%;text-align:left;color:inherit}button.lobby-slot:disabled{opacity:1;cursor:default}button.lobby-slot:not(:disabled):hover{border-color:#d3e4ee;background:#3b5268}.lobby-pending>button{margin-top:10px;font-size:11px}@media(max-width:650px){.lobby-columns{gap:5px}.lobby-team{padding:5px}.lobby-team h3{font-size:11px;letter-spacing:0}.lobby-waiter{flex-direction:column;padding:5px;font-size:10px}.lobby-slot{flex-direction:column;justify-content:center}.lobby-slot>div:last-child{text-align:center}}
+
+#lobbySelect{padding:9px;background:#333;color:#eee;border:1px solid #777;margin-right:10px}.lobby-waiter{min-height:82px}.lobby-pending{max-height:390px;overflow-y:auto}
+
+#connection #online2,#connection #online3{display:none!important}#lobbyFormats{display:flex;align-items:center;justify-content:center;gap:8px;margin:10px 0}#lobbyFormats[hidden]{display:none}#lobbyFormats button[aria-pressed=true]{background:#657c8e;border-color:#bed9ea}#code{display:none}
+
+/* Колонки лобби имеют высоту своего содержимого. */
+.lobby-columns{align-items:start}.lobby-team{align-self:start}
+
+
+#soloFormats,#spectatorControls{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;flex-basis:100%}#soloFormats[hidden],#spectatorControls[hidden]{display:none!important}#spectatorControls button[aria-pressed=true],#soloFormats button[aria-pressed=true]{border-color:#ddd;background:#666}
+
+#playerHealthHud progress{height:20px}
+
+
+.lobby-pending>button[data-lobby-team]{display:block;width:100%;margin:0 0 10px;padding:11px 8px;white-space:normal;text-align:center}
+
+
+.lobby-add-bot,.lobby-remove-bot{width:100%;padding:5px 8px;margin-top:4px;font-size:11px}.lobby-add-bot{background:#31483d;border-color:#698773}.lobby-remove-bot{background:#493d3d;border-color:#8f7474}
+
+#lobbyStart{display:block;width:100%;margin-top:16px;padding:14px;font-size:20px}#lobbyStart[hidden]{display:none}
+
+#scoreboard{position:absolute;z-index:90;top:50%;left:50%;transform:translate(-50%,-50%);width:min(94%,1200px);max-height:85%;overflow:auto;padding:22px;box-sizing:border-box;background:rgba(38,38,41,.88);border:1px solid #88888e;border-radius:12px;color:#e4e4e7;pointer-events:auto}#scoreboard[hidden]{display:none}.score-teams{display:grid;grid-template-columns:1fr 1fr;gap:20px}#scoreboard table{width:100%;border-collapse:collapse;font-size:14px}#scoreboard th,#scoreboard td{padding:9px 5px;border-bottom:1px solid #626267;text-align:center}#scoreboard th:first-child,#scoreboard td:first-child{text-align:left;padding-left:0}#scoreboard small{display:block;margin-top:18px;color:#aebdd0}@media(max-width:1000px){.score-teams{grid-template-columns:1fr}}
+
+#scoreboard > h2{text-align:center}
+
+#scoreboard > h2{margin:0 0 8px}#scoreboard .score-team > h3{margin:0 0 12px}#scoreboard .score-side-1 > h3{text-align:right}#scoreboard .score-ally{color:#a9ccff}#scoreboard .score-enemy{color:#f0aaaa}
+
+#statUpgrades{grid-column:3;justify-self:end;align-self:end;text-align:right}#statUpgrades[hidden]{display:none}#statUpgrades>div{display:flex;gap:5px}#statUpgrades button{width:44px;min-height:49px;padding:3px;color:#d9e9ff}#statUpgrades button>span{display:block;font-size:23px;line-height:24px}#statUpgrades small{font-size:10px}#statUpgrades button:not(:disabled){border-color:#ffd477;box-shadow:0 0 8px #ffd47755}#statPoints{font-size:11px;color:#ffd477}@media(max-width:650px){#statUpgrades{grid-column:1/-1}}
+
+#ultimate30{grid-column:2;justify-self:end;font-size:12px}#ultimate30[hidden]{display:none}
+
+/* Aligned abilities and stat upgrades. */
+#weapons{--icon-width:54px;--icon-height:58px;--icon-gap:6px}
+#weapons .hud-actions{grid-column:2;grid-row:1;align-self:start;gap:var(--icon-gap)}
+#weapons #statUpgrades{grid-column:3;grid-row:1;align-self:start;justify-self:end;text-align:center}
+#statUpgrades>div{gap:var(--icon-gap)}
+#statUpgrades button{position:relative;width:var(--icon-width);height:var(--icon-height);min-height:0;padding:3px;border-radius:5px}
+#statUpgrades button label{display:block;font:9px system-ui,sans-serif;color:#adbed2;pointer-events:none}
+#statUpgrades button>span{font-size:23px;line-height:24px}
+#statPoints{display:block;text-align:center;font:10px system-ui,sans-serif;color:#adbed2;margin-top:7px;min-height:12px}
+#weapons #passiveTalents{grid-column:2;grid-row:2;align-self:start}
+#weapons #artilleryPanel{grid-column:1;grid-row:1 / span 2}
+#hudPointer{position:fixed;width:5px;height:5px;border-radius:50%;background:#fff;box-shadow:0 0 0 1px #17202b;transform:translate(-50%,-50%);pointer-events:none;z-index:2147483647}
+@media(max-width:900px){#weapons{--icon-width:45px;--icon-height:47px}#battlefield #weapons,#battlefield #weapons[data-artillery="true"]{grid-template-columns:minmax(0,1fr) auto auto;gap:7px}}
+@media(max-width:550px){#weapons{--icon-width:26px;--icon-height:39px;--icon-gap:2px}#statUpgrades button>span{font-size:17px;line-height:17px}#statUpgrades small,#statUpgrades button label{font-size:7px}}
+
+#weapons #recovery{display:none!important}#healthBarWrap{position:relative;flex:1;min-width:20px;display:flex;align-items:center}#healthBarWrap #playerHealth{width:100%;height:16px}#healthRegen{position:absolute;inset:0;text-align:center;font:11px/16px system-ui,sans-serif;color:#fff;text-shadow:0 1px 2px #000;pointer-events:none}#statUpgrades button{background:#23354a;color:#dce8f6;border:1px solid #657c99;box-shadow:none;opacity:1}#statUpgrades button:hover{background:#3a536e}#statUpgrades button[aria-disabled="false"]{border-color:#c3ddff}#statUpgrades button>span{color:#dce8f6}#statUpgrades small{color:#a5bad2}
+
+/* Stat ranks sit beneath each icon. */
+#statUpgrades .stat-item{display:flex;flex-direction:column;align-items:center;width:var(--icon-width);gap:5px}
+#statUpgrades .stat-label{font:9px system-ui,sans-serif;color:#adbed2;line-height:12px;white-space:nowrap}
+#statUpgrades .stat-dots{display:flex;justify-content:center;gap:3px;height:6px}
+#statUpgrades .stat-dots i{display:block;width:5px;height:5px;flex-shrink:0;border-radius:50%;background:#000}
+#statUpgrades .stat-dots i.is-filled{background:#fff}
+#statUpgrades button:not(:disabled){box-shadow:none;border-color:#657c99}
+#statUpgrades button[aria-disabled="false"]{border-color:#fff;box-shadow:0 0 8px #ffffff80}
+#statUpgrades button[aria-disabled="false"]::before{content:'+';position:absolute;z-index:5;top:-10px;left:50%;transform:translateX(-50%);width:22px;height:16px;border:1px solid #fff;border-radius:3px;background:#23354a;color:#fff;font:700 16px/14px system-ui,sans-serif;pointer-events:none;box-shadow:0 0 5px #ffffff60}
+#statUpgrades button{overflow:visible;display:flex;align-items:center;justify-content:center}
+@media(max-width:550px){#statUpgrades .stat-label{font-size:7px}#statUpgrades .stat-dots{gap:1px}#statUpgrades .stat-dots i{width:3px;height:3px}#statUpgrades button[aria-disabled="false"]::before{width:16px;height:13px;top:-8px;font-size:13px;line-height:11px}}
+
+/* Immediate stat descriptions, with no native tooltip delay. */
+#statUpgrades button[data-tooltip]::after{content:attr(data-tooltip);position:absolute;bottom:calc(100% + 14px);left:50%;transform:translateX(-50%);z-index:20;padding:6px 8px;border:1px solid #657c99;border-radius:4px;background:#101c2d;color:#dce8f6;font:11px/1.3 system-ui,sans-serif;white-space:nowrap;pointer-events:none;display:none;box-shadow:0 2px 8px #0008}
+#statUpgrades button[data-tooltip]:hover::after,#statUpgrades button[data-tooltip]:focus-visible::after{display:block}
+
+#weapons .hud-actions{position:relative;padding-bottom:26px}#weapons .arsenal-label{position:absolute;left:0;right:0;bottom:0;text-align:center;font:10px/12px system-ui,sans-serif;color:#adbed2;pointer-events:none}#weapons .charge-row{grid-template-columns:80px 1fr}#hudPointer[hidden]{display:none!important}
+@media(max-width:550px){#weapons .charge-row{grid-template-columns:1fr}}
+
+/* Shared heading baseline and icon baseline. */
+#weapons .hud-actions{padding-top:25px;padding-bottom:0;align-items:flex-start}
+#weapons .arsenal-label{top:0;bottom:auto;line-height:12px}
+#weapons #statUpgrades{position:relative;padding-top:25px}
+#statPoints{position:absolute;top:0;left:0;right:0;margin:0;line-height:12px}
+#weapons #artilleryPanel{position:relative}
+#weapons #shellIcon{position:absolute;z-index:2;top:35px;left:calc(50% - 24px);width:20px;height:20px;pointer-events:none;color:#f0f6ff;filter:drop-shadow(0 1px 2px #000)}
+#weapons #ammo .ammo-heading{display:none}
+#weapons #playerHealthHud,#weapons #experienceHud{display:block;grid-column:1/-1;padding:0;border:0;margin:0}
+#healthBarWrap,#experienceBarWrap{display:block;position:relative;width:100%;height:16px;min-width:0}
+#healthBarWrap #playerHealth,#experienceBarWrap #xpbar{display:block;width:100%;height:16px;margin:0;border:0;border-radius:4px;overflow:hidden;background:#080f19}
+#experienceBarWrap #xpbar{accent-color:#c63239}
+#xpbar::-webkit-progress-bar{background:#080f19}#xpbar::-webkit-progress-value{background:#c63239}#xpbar::-moz-progress-bar{background:#c63239}
+#playerHealthText,#experienceBarWrap #xp{position:absolute;inset:0;text-align:center;font:11px/16px system-ui,sans-serif;color:#fff;text-shadow:0 1px 2px #000;pointer-events:none;z-index:2}
+#healthBarWrap #healthRegen,#experienceBarWrap #level{position:absolute;left:auto;right:6px;top:0;bottom:0;font:11px/16px system-ui,sans-serif;color:#fff;text-shadow:0 1px 2px #000;z-index:3;pointer-events:none}
+#xpRecent{position:absolute;inset:0;border-radius:4px;pointer-events:none;z-index:1}
+
+/* Muted health and experience tones on the same dark track. */
+#healthBarWrap #playerHealth{appearance:none;-webkit-appearance:none;accent-color:#829d89;background:#080f19}
+#healthBarWrap #playerHealth::-webkit-progress-bar{background:#080f19}
+#healthBarWrap #playerHealth::-webkit-progress-value{background:#829d89}
+#healthBarWrap #playerHealth::-moz-progress-bar{background:#829d89}
+#experienceBarWrap #xpbar{appearance:none;-webkit-appearance:none;accent-color:#9d5c65;background:#080f19}
+#experienceBarWrap #xpbar::-webkit-progress-bar{background:#080f19}
+#experienceBarWrap #xpbar::-webkit-progress-value{background:#9d5c65}
+#experienceBarWrap #xpbar::-moz-progress-bar{background:#9d5c65}
+
+#weapons #shellIcon{position:static;width:20px;height:18px;color:#142437;filter:none;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+#artillerySide .diagram-shell{color:#142437;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+
+/* Original vehicle glyphs with a dark shell inset into the body. */
+#weapons #vehicleSideGlyph{position:relative;display:flex;align-items:center;justify-content:center;width:150px;height:100px;font-size:65px;line-height:1;white-space:nowrap}
+#weapons #vehicleGlyphBarrel{position:static;display:inline-block;margin-left:-3px;width:auto;height:auto;overflow:visible;background:none;font-size:inherit}
+.vehicle-glyph-body{position:relative;display:inline-block}
+#weapons #vehicleSideGlyph #shellIcon{position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);width:18px;height:17px;color:#142437;filter:none;pointer-events:none}
+
+.vehicle-card .vehicle-summary{font-size:12px;line-height:1.5;color:#dce8f6;max-width:260px;text-align:center}
+
+/* Stat pictograms match the ability icon strokes and scale. */
+#statUpgrades button .stat-icon{display:block;width:calc(100% - 10px);height:calc(100% - 14px);fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+@media(max-width:550px){#statUpgrades button .stat-icon{width:calc(100% - 2px);height:calc(100% - 8px)}}
+
+/* Honor hidden state despite the shared diagram layout. */
+#weapons #vehicleSideGlyph[hidden],#weapons #artilleryPanel[data-kind=artillery] #vehicleSideGlyph{display:none!important}
+
+/* Talent choices stay centered immediately above the measured HUD. */
+#battlefield #combatOverlay{top:0;bottom:0}
+#combatOverlay #choices{position:absolute;left:0;bottom:var(--talent-bottom,220px);width:100%;margin:0}
+#combatOverlay #announcements{position:absolute;top:14px;left:0;transform:none;width:100%}
+@media(max-width:650px){#combatOverlay #announcements{top:7px}}
+
+#weapons #artilleryRange[hidden]{display:none!important}.nickname-label{display:flex;align-items:center;justify-content:center;gap:10px}.nickname-label input{width:200px}#gameChat{position:absolute;left:12px;top:15%;width:min(290px,25%);z-index:7;font-size:11px;color:#dce8f6}#chatMessages{max-height:150px;overflow:auto;overflow-wrap:anywhere;background:#101c2da6;border-radius:4px}#chatMessages:empty{display:none}#chatMessages>div{padding:4px 7px}#chatOpen{font-size:10px;padding:4px 7px;margin-top:4px;background:#17283ac9}#chatForm{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;background:#142236;padding:6px;border-radius:4px}#chatForm[hidden]{display:none}#chatInput{width:100%;min-width:0;font-size:12px}#chatForm button,#chatScope{font-size:11px;padding:4px}#gameChat:focus-within{width:min(340px,90%)}@media(max-width:650px){#gameChat{width:30%;left:6px;top:12%}#chatMessages{max-height:95px;font-size:9px}}
+
+html,body,#battlefield,#battlefield *{-webkit-user-select:none;user-select:none}#battlefield input,#battlefield textarea,input,textarea{-webkit-user-select:text;user-select:text}
+
+#disconnectPause{padding:8px;background:#142236e8;border:1px solid #657c99;border-radius:5px;margin-bottom:8px}#disconnectPause[hidden]{display:none!important}#disconnectStatus{font-size:11px;line-height:1.4;margin:0 0 7px;color:#d9c59f}#votePause{width:100%;font-size:11px;padding:7px}#votePause[aria-pressed=true]{border-color:#d9c59f;background:#43556a}
+
+/* Passive cooldowns are the next row after abilities, above both charge bars. */
+#weapons #passiveTalents{grid-column:2;grid-row:2;align-self:start;justify-content:center}
+#weapons #ammo{grid-column:2;grid-row:3;align-self:start;min-width:0;width:100%;margin:0}
+#weapons #artilleryPanel{grid-column:1;grid-row:1 / span 3}
+#chatForm button[type=submit]{margin-left:auto;order:3}
+#chatForm #chatScope{order:2}#chatForm #chatInput{order:1;flex-basis:100%}
