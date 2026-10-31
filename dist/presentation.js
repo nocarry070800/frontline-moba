@@ -26,7 +26,7 @@ class VisionMeshes {
    if(fresh)entry={x:u.x,y:u.y,vision:u.vision,r:u.r,at:-Infinity,lastFrame:now,circle:true};
    const moved=entry.x!==u.x||entry.y!==u.y;
    if(fresh||(moved&&(u.id===state.me.tank.id||now-entry.at>=50))){
-    const near=(u.vehicle==='apache'?denseSmoke:blockers).filter(b=>{const x=b.x-u.x,y=b.y-u.y,r=u.vision+b.r;return x*x+y*y<=r*r;});
+    const near=(['apache','littlebird'].includes(u.vehicle)?denseSmoke:blockers).filter(b=>{const x=b.x-u.x,y=b.y-u.y,r=u.vision+b.r;return x*x+y*y<=r*r;});
     const target=near.length?sightRays.map(d=>{
      let ray=u.vision;
      for(const f of near){
@@ -89,10 +89,10 @@ function repairProgress(r,time){if(!r)return 0;const clamp=v=>Math.max(0,Math.mi
 function artilleryBarrelRecoil(u,time,config={}){if(u.vehicle!=='artillery'||!['AP','HE'].includes(u.fireAmmo))return 0;const age=time-u.fireTime,kick=config.kickSeconds??.04,restore=config.returnSeconds??.65;if(!Number.isFinite(age)||age<0||age>kick+restore)return 0;const amount=age<kick?age/Math.max(.001,kick):(1-(age-kick)/Math.max(.001,restore))**2;return (config.distance??24)*amount;}
 function recoilPose(u,time){
  const age=time-u.fireTime,rocket=['Missiles','AirMissiles','Barrage'].includes(u.fireAmmo);
- if(!Number.isFinite(age)||age<0||age>.8||u.hp<=0||u.fireAmmo==='TOW'||(u.vehicle==='apache'&&!rocket))return {x:0,y:0,barrel:0,pitch:0};
+ if(!Number.isFinite(age)||age<0||age>.8||u.hp<=0||u.fireAmmo==='TOW'||(['apache','littlebird'].includes(u.vehicle)&&!rocket))return {x:0,y:0,barrel:0,pitch:0};
  const kick=age<.035?age/.035:Math.exp(-(age-.035)/.13),angle=u.fireAngle??u.turret??u.angle;
- const body=u.fireAmmo==='MG'?0:u.vehicle==='apache'?4.5:u.vehicle==='bradley'?0:.8;
- return {x:-Math.cos(angle)*body*kick,y:-Math.sin(angle)*body*kick,barrel:u.fireAmmo==='MG'?0:(u.vehicle==='bradley'?3:11)*kick,mgBarrel:u.fireAmmo==='MG'?kick:0,pitch:u.vehicle==='apache'?-.35*kick:0};
+ const body=u.fireAmmo==='MG'?0:['apache','littlebird'].includes(u.vehicle)?4.5:u.vehicle==='bradley'?0:.8;
+ return {x:-Math.cos(angle)*body*kick,y:-Math.sin(angle)*body*kick,barrel:u.fireAmmo==='MG'?0:(u.vehicle==='bradley'?3:11)*kick,mgBarrel:u.fireAmmo==='MG'?kick:0,pitch:['apache','littlebird'].includes(u.vehicle)?-.35*kick:0};
 }
 function screenShake(events,time,duration=.28){let x=0,y=0;if(!Number.isFinite(time))return {x:0,y:0};for(const e of Array.isArray(events)?events:[]){if(!e||typeof e!=='object')continue;const life=e.duration??duration;if(!Number.isFinite(e.time)||!Number.isFinite(e.strength)||!Number.isFinite(life)||life<=0)continue;const age=time-e.time;if(age<0||age>=life)continue;const strength=Math.max(0,Math.min(20,e.strength))*(1-age/life)**2,phase=((Number.isFinite(e.id)?e.id:0)%97)*1.7;x+=Math.cos(age*115+phase)*strength;y+=Math.sin(age*139+phase)*strength*.65;}const cap=4;return {x:Math.max(-cap,Math.min(cap,x)),y:Math.max(-cap,Math.min(cap,y))};}
 

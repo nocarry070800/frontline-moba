@@ -65,7 +65,7 @@ function install(Game,{B,distance,clamp,angleDiff,containingBush,vehicleConfig,v
    u.speed*=factor;const x=u.x,y=u.y;try{old.move.call(this,u,target,dt,stop,reverse);}finally{u.speed=speed;}
    if(st){if(Math.hypot(u.x-x,u.y-y)>.001){st.moved=true;st.still=0;st.flight+=dt;}else st.flight=0;}
  });
- wrap('attackRange',function(p){let range=old.attackRange.call(this,p),skill=null;if(p.vehicle==='apache'&&p.weapon==='ChainGun')skill=get(p,'aHover');if(p.vehicle==='bradley'&&['AP','HE'].includes(p.weapon))skill=get(p,'bSector');if(skill&&state(p).still>=skill.prepare)range*=1+skill.percent/100;return range;});
+ wrap('attackRange',function(p){let range=old.attackRange.call(this,p),skill=null;if(['apache','littlebird'].includes(p.vehicle)&&p.weapon==='ChainGun')skill=get(p,'aHover');if(p.vehicle==='bradley'&&['AP','HE'].includes(p.weapon))skill=get(p,'bSector');if(skill&&state(p).still>=skill.prepare)range*=1+skill.percent/100;return range;});
  wrap('faceApache',function(p,desired,dt){const turn=p.tank.hullTurnSpeed,skill=get(p,'aTurn');if(skill&&state(p).still>0)p.tank.hullTurnSpeed*=1+skill.percent/100;try{return old.faceApache.call(this,p,desired,dt);}finally{p.tank.hullTurnSpeed=turn;}});
  wrap('profile',function(a,b){const w=old.profile.call(this,a,b),p=a.kind==='tank'?this.owner(a):null;
    if(a.attackSlowUntil>this.time)w.interval/=a.attackSlowFactor??1;
@@ -98,7 +98,7 @@ function install(Game,{B,distance,clamp,angleDiff,containingBush,vehicleConfig,v
  });
  wrap('damage',function(s,u,damage){const before=u.hp;old.damage.call(this,s,u,damage);if(u.hp>=before||s.team===u.team)return;
    if(s.markDuration){u.markedUntil??={};u.markedUntil[s.team]=this.time+s.markDuration;}
-   if(s.moveSuppress&&((s.ammo==='ChainGun'&&u.kind==='infantry')||(s.ammo==='TOW'&&u.kind==='tank'&&u.vehicle!=='apache'))){u.slowUntil=this.time+s.moveSuppress.duration;u.slowFactor=s.moveSuppress.factor;}
+   if(s.moveSuppress&&((s.ammo==='ChainGun'&&u.kind==='infantry')||(s.ammo==='TOW'&&u.kind==='tank'&&!['apache','littlebird'].includes(u.vehicle)))){u.slowUntil=this.time+s.moveSuppress.duration;u.slowFactor=s.moveSuppress.factor;}
    if(s.attackSuppress&&u.kind==='infantry'){u.attackSlowUntil=this.time+s.attackSuppress.duration;u.attackSlowFactor=s.attackSuppress.factor;}
    const p=this.players[s.player],focus=p&&get(p,'aFocus');if(focus&&s.ammo==='ChainGun'){const st=state(p);if(st.focusId!==u.id||this.time-st.focusAt>focus.reset)st.focusHits=0;st.focusId=u.id;st.focusHits++;st.focusAt=this.time;}
  });
@@ -123,7 +123,7 @@ function install(Game,{B,distance,clamp,angleDiff,containingBush,vehicleConfig,v
    p.smokeCapacity=B.smoke.capacity;p.smokeConcentrationMultiplier=get(p,'bDense')?.concentration??1;
    p.fireOnMove=true;
    if(t.hp<=0){p.pairedMissile=null;st.flight=st.still=st.chain=0;st.focusHits=0;}
-   old.updatePlayer.call(this,p,dt);if(p.vehicle==='apache'&&!st.moved)t.airSpeed=0;
+   old.updatePlayer.call(this,p,dt);if(['apache','littlebird'].includes(p.vehicle)&&!st.moved)t.airSpeed=0;
    if(p.pairedMissile&&this.time>=p.pairedMissile.at){const pair=p.pairedMissile;p.pairedMissile=null;const target=this.all().find(u=>u.id===pair.target)||(pair.freeAim?{x:t.x+Math.cos(t.angle)*1000,y:t.y+Math.sin(t.angle)*1000}:null);if(t.hp>0&&!p.repair&&p.stunnedUntil<=this.time&&!this.overObstacle(p)&&p.weapon==='Missiles'&&target&&(pair.freeAim||this.visible(p.team,target))&&Math.abs(angleDiff(Math.atan2(target.y-t.y,target.x-t.x),t.angle))<.045){const side=p.missileSide;p.missileSide*=-1;const x=t.x+Math.cos(t.angle)*12-Math.sin(t.angle)*15*side,y=t.y+Math.sin(t.angle)*12+Math.cos(t.angle)*15*side,angle=t.angle;this.shots.push({...pair.shot,id:++this.id,createdAt:this.time,x,y,vx:Math.cos(angle),vy:Math.sin(angle),ignored:[],tested:[]});this.recordRecoil(t,'Missiles',t.angle);}}
  });
  const lateMove=P.move;P.move=function(u,target,dt,stop=0,reverse=false){const p=u.kind==='tank'?this.owner(u):null,speed=u.speed;let factor=1;if(p){if(p.breakUntil>this.time)factor*=1+(get(p,'tBreak')?.percent??0)/100;if(p.escapeSmokeUntil>this.time)factor*=1+(get(p,'bEscapeSmoke')?.percent??0)/100;const evac=get(p,'bEvac');if(evac&&u.hp/u.max<evac.threshold)factor*=1+evac.percent/100;}u.speed*=factor;try{return lateMove.call(this,u,target,dt,stop,reverse);}finally{u.speed=speed;}};
@@ -137,7 +137,7 @@ function install(Game,{B,distance,clamp,angleDiff,containingBush,vehicleConfig,v
  lateDamage.call(this,s,u,damage*factor);if(u.hp>=before)return;
  if(victim&&u.hp>0){const skill=get(victim,'tEmergency');if(skill&&u.hp/u.max<skill.threshold&&this.time>=(victim.shieldReady??0)){victim.shieldUntil=this.time+skill.duration;victim.shieldReady=this.time+skill.cooldown;}}
  if(!killer||u.team===s.team)return;
- if(s.lateTracks&&u.kind==='tank'&&u.vehicle!=='apache'){u.slowUntil=this.time+s.lateTracks.duration;u.slowFactor=1-s.lateTracks.percent/100;}
+ if(s.lateTracks&&u.kind==='tank'&&!['apache','littlebird'].includes(u.vehicle)){u.slowUntil=this.time+s.lateTracks.duration;u.slowFactor=1-s.lateTracks.percent/100;}
  if(hunter&&s.ammo==='TOW'&&u.kind==='tank'){u.huntedBy??={};u.huntedBy[killer.id]=this.time+hunter.duration;}
  if(u.hp<=0&&u.kind==='tank'&&get(killer,'tLoader')&&killer.cannon.target)killer.cannon.left*=1-get(killer,'tLoader').percent/100;
  const sustain=get(killer,'bSustain');if(sustain&&['AP','HE'].includes(s.ammo)&&state(killer).overdriveReady>this.time){const st=state(killer);if(st.sustainCycle!==st.overdriveReadyOriginal){st.sustainCycle=st.overdriveReadyOriginal;st.sustainUsed=0;}const amount=Math.min(sustain.seconds,sustain.max-(st.sustainUsed??0));st.overdriveReady=Math.max(this.time,st.overdriveReady-amount);st.sustainUsed=(st.sustainUsed??0)+amount;}

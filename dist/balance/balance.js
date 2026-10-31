@@ -462,6 +462,8 @@
       respawnPerLevel: 1,
 
       baseZoneHP: 50,
+      // Множитель восстановления HE БМП и боезапаса Little Bird в своей ремонтной зоне.
+      baseAmmoRegenMultiplier: 3,
 
       baseZoneRadius: 46,
 
@@ -593,7 +595,7 @@
   // Одно очко за уровень начиная со второго; максимум 6 выборов на характеристику (135%).
   balance.level30 = {};
   balance.statProgression = { initial: 0.75, step: 0.10, maxRanks: 6 };
-  const parts=typeof module!=='undefined'&&module.exports?[require('./tank.js'),require('./artillery.js'),require('./ifv.js'),require('./apache.js')]:[root.FRONTLINE_BALANCE_TANK,root.FRONTLINE_BALANCE_ARTILLERY,root.FRONTLINE_BALANCE_IFV,root.FRONTLINE_BALANCE_APACHE];
+  const parts=typeof module!=='undefined'&&module.exports?[require('./tank.js'),require('./artillery.js'),require('./ifv.js'),require('./apache.js'),require('./littlebird.js')]:[root.FRONTLINE_BALANCE_TANK,root.FRONTLINE_BALANCE_ARTILLERY,root.FRONTLINE_BALANCE_IFV,root.FRONTLINE_BALANCE_APACHE,root.FRONTLINE_BALANCE_LITTLEBIRD];
   for(const part of parts){if(!part)throw Error('Сначала загрузите tank.js, artillery.js, ifv.js и apache.js');const {weaponAimLines,level30,feedback,...vehicle}=part;Object.assign(balance,vehicle);Object.assign(balance.weaponAimLines,weaponAimLines);Object.assign(balance.level30,level30);Object.assign(balance.feedback,feedback);}
   if (typeof module !== 'undefined' && module.exports) module.exports = balance;
   else root.FRONTLINE_BALANCE = balance;
