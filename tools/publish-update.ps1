@@ -21,6 +21,10 @@ try {
         if ([string]::IsNullOrWhiteSpace($Message)) { $Message = Read-Host 'What changed? (Enter for automatic description)' }
         if ([string]::IsNullOrWhiteSpace($Message)) { $Message = 'Game update ' + (Get-Date -Format 'yyyy-MM-dd HH:mm') }
         Invoke-Git -GitArgs @('commit', '-m', $Message)
+    } else {
+        if ([string]::IsNullOrWhiteSpace($Message)) { $Message = 'Redeploy current version ' + (Get-Date -Format 'yyyy-MM-dd HH:mm:ss') }
+        Write-Host 'No file changes. Creating a redeploy commit.'
+        Invoke-Git -GitArgs @('commit', '--allow-empty', '-m', $Message)
     }
     Invoke-Git -GitArgs @('push', 'origin', 'main')
     Write-Host ''

@@ -73,3 +73,6 @@ printf '169.58.99.208 '; cut -d ' ' -f 1,2 /etc/ssh/ssh_host_ed25519_key.pub
 - Активная версия: `cat /opt/frontline-current/.release.json` — после первой автоматической публикации.
 
 Сохранённые версии находятся в `/opt/frontline-releases`. Исходная ручная установка остаётся в `/opt/frontline`.
+
+
+Если изменений в файлах нет, `PUBLISH-UPDATE.cmd` создаёт пустой служебный коммит `Redeploy current version ...` и отправляет его в GitHub. Это снова запускает публикацию текущей версии на Contabo. Дополнительный вход через GitHub CLI не требуется.
