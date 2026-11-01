@@ -1,0 +1,63 @@
+name: Deploy game to Contabo
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: frontline-contabo
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Read game files
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Install Node.js 24
+        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
+        with:
+          node-version: '24'
+          package-manager-cache: false
+
+      - name: Validate game and deployment
+        run: |
+          node tools/deploy/check.cjs
+          node tools/deploy/test.cjs
+
+      - name: Package game
+        env:
+          DEPLOY_SHA: ${{ github.sha }}
+        run: node tools/deploy/build.cjs "$RUNNER_TEMP/frontline.json.gz" "$DEPLOY_SHA"
+
+      - name: Update server
+        env:
+          DEPLOY_SHA: ${{ github.sha }}
+          DEPLOY_HOST: 169.58.99.208
+          DEPLOY_KEY: ${{ secrets.CONTABO_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.CONTABO_KNOWN_HOSTS }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "$DEPLOY_KEY" || -z "$DEPLOY_KNOWN_HOSTS" ]]; then
+            echo 'Configure CONTABO_SSH_KEY and CONTABO_KNOWN_HOSTS in repository Settings > Secrets and variables > Actions.' >&2
+            exit 1
+          fi
+          KEY_FILE="$RUNNER_TEMP/frontline_deploy_key"
+          HOSTS_FILE="$RUNNER_TEMP/frontline_known_hosts"
+          trap 'rm -f "$KEY_FILE" "$HOSTS_FILE"' EXIT
+          umask 077
+          printf '%s\n' "$DEPLOY_KEY" | tr -d '\r' > "$KEY_FILE"
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" | tr -d '\r' > "$HOSTS_FILE"
+          ssh -T -i "$KEY_FILE" -o IdentitiesOnly=yes -o BatchMode=yes \
+            -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$HOSTS_FILE" \
+            -o ConnectTimeout=20 -o ServerAliveInterval=15 -o ServerAliveCountMax=3 \
+            "root@$DEPLOY_HOST" "deploy $DEPLOY_SHA" < "$RUNNER_TEMP/frontline.json.gz"
