@@ -36,7 +36,7 @@
     "weapons": {
       "Missiles": {
         "damageType": "AP",
-        "damage": 350,
+        "damage": 100,
         "interval": 0.2,
         "speed": 520,
         "range": 175
