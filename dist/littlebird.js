@@ -25,7 +25,7 @@ P.updatePlayer=function(p,dt){if(p.vehicle!=='littlebird')return tick.call(this,
 
 
 const rocketTick=P.updateWeapons,rocketProfile=P.profile,rocketTarget=P.towTarget;
-P.updateWeapons=function(p,dt){rocketTick.call(this,p,dt);if(p.vehicle!=='littlebird')return;const cfg=B.littlebird.rocketReserve,factor=p.skills?.lbRocketStock?2:1;for(const [skill,key,base] of [['lbGroundRockets','lbGroundFuel',cfg.groundCapacity],['lbAirRockets','lbAirFuel',cfg.airCapacity]])if(p.skills?.[skill])p[key]=Math.min(base*factor,(p[key]??base)+dt/cfg.reloadSeconds);p.airLeft=0;};
+P.updateWeapons=function(p,dt){rocketTick.call(this,p,dt);if(p.vehicle!=='littlebird')return;const cfg=B.littlebird.rocketReserve,factor=p.skills?.lbRocketStock?2:1;for(const [skill,key,base,reload] of [['lbGroundRockets','lbGroundFuel',cfg.groundCapacity,cfg.groundReloadSeconds],['lbAirRockets','lbAirFuel',cfg.airCapacity,cfg.airReloadSeconds]])if(p.skills?.[skill])p[key]=Math.min(base*factor,(p[key]??base)+dt/Math.max(.01,reload));p.airLeft=0;};
 P.profile=function(a,b){const w=rocketProfile.call(this,a,b),p=a.kind==='tank'?this.owner(a):null;if(p?.vehicle==='littlebird'&&p.weapon!=='ChainGun'){w.interval=B.littlebird.weapons[p.weapon].interval;w.speed=B.littlebird.weapons[p.weapon].speed;}return w;};
 P.towTarget=function(p,u){if(p.vehicle==='littlebird'&&p.weapon==='Missiles'&&['apache','littlebird'].includes(u.vehicle))return false;return rocketTarget.call(this,p,u);};
 }const api={install};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.FrontlineLittleBird=api;})(typeof globalThis!=='undefined'?globalThis:this);

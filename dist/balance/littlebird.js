@@ -283,7 +283,8 @@
     "rocketReserve": {
       "groundCapacity": 2,
       "airCapacity": 1,
-      "reloadSeconds": 12
+      "groundReloadSeconds": 12,
+      "airReloadSeconds": 12
     }
   },
   "weaponAimLines": {
